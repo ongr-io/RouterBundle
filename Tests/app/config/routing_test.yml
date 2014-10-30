@@ -1,0 +1,7 @@
+ongr_test_show:
+    pattern:  /test/{documentId}/
+    defaults: { _controller: AcmeTestBundle:Test:testId }
+
+ongr_test_document_page:
+    pattern:  /testDocument/{document}
+    defaults: { _controller: AcmeTestBundle:Test:testDocument }

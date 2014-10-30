@@ -1,0 +1,30 @@
+# Framework Configuration
+framework:
+    secret: "TOP-SECRET"
+    router:
+        resource: "%kernel.root_dir%/config/routing_test.yml"
+        strict_requirements: %kernel.debug%
+    templating:
+            engines: ['twig']
+    test: ~
+
+ongr_elasticsearch:
+    connections:
+        default:
+            hosts:
+                - { host: 127.0.0.1:9200}
+            index_name: ongr-seo-test
+    managers:
+        default:
+            connection: default
+            mappings:
+                - AcmeTestBundle
+
+ongr_router:
+    es_manager: default
+    seo_routes:
+        product:
+            _route: ongr_test_document_page
+            _controller: AcmeTestBundle:Test:testDocument
+            _default_route: ongr_test_show
+            _id_param: documentId
