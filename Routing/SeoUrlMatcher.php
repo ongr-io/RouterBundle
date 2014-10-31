@@ -86,11 +86,11 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
         $requestedUrlOriginal = $url;
 
         /** @var RequestContext $context */
-        $context = $this->cachedMatcher->getContext();
+        $context = $this->getCachedMatcher()->getContext();
 
         // Try to load default sf route first.
         try {
-            return $this->cachedMatcher->match($pathinfo);
+            return $this->getCachedMatcher()->match($pathinfo);
         } catch (ResourceNotFoundException $e) {
             // Default sf route not found.
             if (!$this->allowHttps && $context->getScheme() != self::SCHEME_HTTP) {
@@ -114,7 +114,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
                     if ($documentSeoKey === false) {
                         return $this->doRedirect(
                             $this->ensurePrefixSlash($documentLink),
-                            $this->typeMap[$documentName]['_route'],
+                            $this->getTypeMap()[$documentName]['_route'],
                             (!$this->allowHttps) ? self::SCHEME_HTTP : null
                         );
                     }
@@ -122,11 +122,11 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
                 // Force redirect to original link, if links are not identical (lowercase, trailing slash).
                 if ($requestedUrlOriginal !== $documentLink) {
-                    return $this->doRedirect($documentLink, $this->typeMap[$documentName]['_route']);
+                    return $this->doRedirect($documentLink, $this->getTypeMap()[$documentName]['_route']);
                 }
 
                 return array_merge(
-                    $this->typeMap[$documentName],
+                    $this->getTypeMap()[$documentName],
                     [
                         'document' => $document,
                         'seoKey' => $documentSeoKey,
@@ -149,7 +149,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
      */
     protected function doRedirect($link, $route, $scheme = self::SCHEME_HTTP)
     {
-        return $this->cachedMatcher->redirect($this->ensurePrefixSlash($link), $route, $scheme);
+        return $this->getCachedMatcher()->redirect($this->ensurePrefixSlash($link), $route, $scheme);
     }
 
     /**
@@ -163,12 +163,12 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
      */
     protected function getLink($document, $url)
     {
-        if (!$this->seoUrlMapper) {
+        if (!$this->getSeoUrlMapper()) {
             throw new \LogicException('Seo url mapper is not set.');
         }
 
-        $documentSeoKey = $this->seoUrlMapper->checkDocumentUrlExists($document, $url);
-        $documentLink = $this->seoUrlMapper->getLinkByKey($document, $documentSeoKey);
+        $documentSeoKey = $this->getSeoUrlMapper()->checkDocumentUrlExists($document, $url);
+        $documentLink = $this->getSeoUrlMapper()->getLinkByKey($document, $documentSeoKey);
 
         return [$documentSeoKey, $documentLink];
     }
@@ -215,14 +215,14 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
      */
     private function getDocumentByUrl($url)
     {
-        $repository = $this->esManager->getRepository([]);
+        $repository = $this->getEsManager()->getRepository([]);
         $out = [];
 
         /** @var SeoAwareTrait $document */
         foreach ($repository->execute($this->getSearch($url)) as $document) {
             $documentName = strtolower(preg_replace('/.*([\w]+)$/U', '$1', get_class($document)));
 
-            if ($document && isset($this->typeMap[$documentName])) {
+            if ($document && isset($this->getTypeMap()[$documentName])) {
                 $out = [$documentName, $document];
                 if (!in_array($this->getUrlHash($url), $document->expiredUrl)) {
                     break;
