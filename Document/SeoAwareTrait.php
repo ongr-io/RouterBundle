@@ -32,7 +32,7 @@ trait SeoAwareTrait
      *
      * @var UrlObject[]|\Iterator
      *
-     * @ES\Property(name="url", type="object", objectName="ONGRRouterBundle:UrlObject")
+     * @ES\Property(name="url", type="object", objectName="ONGRRouterBundle:UrlObject", multiple=true)
      */
     public $url;
 
