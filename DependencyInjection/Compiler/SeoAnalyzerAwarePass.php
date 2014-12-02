@@ -33,9 +33,15 @@ class SeoAnalyzerAwarePass implements CompilerPassInterface
             $connection->addMethodCall(
                 'updateSettings',
                 [
-                    [ 'body' => ['settings' => [ 'analysis' => [
-                        'analyzer' => $container->getParameter('ongr_router.analyzers')
-                    ]]]]
+                    [
+                        'body' => [
+                            'settings' => [
+                                'analysis' => [
+                                    'analyzer' => $container->getParameter('ongr_router.analyzers'),
+                                ],
+                            ],
+                        ],
+                    ],
                 ]
             );
         }

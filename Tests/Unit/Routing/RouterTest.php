@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Scope;
 
 /**
- * Tests for url matcher class
+ * Tests for url matcher class.
  */
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,7 +94,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testGetSSlOriginTrustHeaders()
     {
         $this->assertEquals(
-            array('Access-Control-Allow-Origin' => 'https://www.europeanmedia.com'),
+            ['Access-Control-Allow-Origin' => 'https://www.europeanmedia.com'],
             $this->getRouter()->getSSlOriginTrustHeaders()
         );
     }

@@ -29,11 +29,11 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
             [
                 'generate',
                 'setContext',
-                'getContext'
+                'getContext',
             ]
         );
 
-        $generator = new SeoUrlGenerator($parent, array());
+        $generator = new SeoUrlGenerator($parent, []);
 
         $context = new RequestContext();
         $hash = spl_object_hash($context);
@@ -50,7 +50,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function getGenerateTestCases()
     {
-        $out = array();
+        $out = [];
 
         // Case #0: should match.
         list($name, $typeMap) = $this->getDefaultTypeMap();
@@ -90,7 +90,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $parameters = [
             'document' => $document,
             'test' => 'test',
-            'forceDefault' => true
+            'forceDefault' => true,
         ];
         $expect = 'http://localhost/test/url?test=test&forceDefault=1';
         $out[] = [$typeMap, $name, $parameters, $expect];
