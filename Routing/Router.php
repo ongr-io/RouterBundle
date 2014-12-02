@@ -36,7 +36,7 @@ class Router extends BaseRouter
     public function __construct(
         ContainerInterface $container,
         $resource,
-        array $options = array(),
+        array $options = [],
         RequestContext $context = null
     ) {
         $this->container = $container;

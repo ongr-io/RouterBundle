@@ -34,7 +34,7 @@ class SeoUrlGenerator extends UrlGenerator
      * @param UrlGeneratorInterface $parent Parent generator.
      * @param array                 $config Type map.
      */
-    public function __construct($parent, $config = array())
+    public function __construct($parent, $config = [])
     {
         $this->parentGenerator = $parent;
         $this->typeMap = $config;
@@ -43,7 +43,7 @@ class SeoUrlGenerator extends UrlGenerator
     /**
      * {@inheritdoc}
      */
-    public function generate($name, $parameters = array(), $absolute = false)
+    public function generate($name, $parameters = [], $absolute = false)
     {
         foreach ($this->typeMap as $params) {
             if ($params['_route'] == $name) {
