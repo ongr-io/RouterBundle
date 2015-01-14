@@ -1,4 +1,15 @@
+Router Bundle
+=============
 
+Contents:
+
+.. toctree::
+    :maxdepth: 150
+    :titlesonly:
+    :glob:
+
+    *
+    
 ## Introduction
 
 RouterBundle provides URLs transformation functionality to ONGR platform. This can be used for generating nice URLs for products, categories or any document. Beautiful URLs helps SEO and improves user's usability experience.
