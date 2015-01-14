@@ -25,7 +25,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testSetGetContext()
     {
         $parent = $this->getMock(
-            'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface',
+            'Symfony\Component\Routing\Generator\UrlGeneratorInterface',
             [
                 'generate',
                 'setContext',
@@ -136,7 +136,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
                 '_controller' => 'ONGRTestBundle:Test:document',
                 '_default_route' => 'testdefaultroute',
                 '_id_param' => 'testId',
-            ]
+            ],
         ];
 
         $document = new \stdClass();
@@ -233,7 +233,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $pParameters = false
     ) {
         $parent = $this->getMock(
-            'Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface',
+            'Symfony\Component\Routing\Generator\UrlGeneratorInterface',
             [
                 'generate',
                 'setContext',
@@ -269,7 +269,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
             'TestModel' => [
                 '_route' => $name,
                 '_controller' => 'ONGRTestBundle:Test:document',
-            ]
+            ],
         ];
 
         return [$name, $typeMap];
