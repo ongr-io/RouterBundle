@@ -131,4 +131,4 @@ SEO generator will use this action and it's associated route to produce URL from
 
 ### Setup
 
-Setup documentation for the Router bundle is available [here](setup.md).
+Setup documentation for the Router bundle is available [here](setup.rst).
