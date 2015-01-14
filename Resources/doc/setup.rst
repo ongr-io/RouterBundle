@@ -2,18 +2,20 @@
 
 Add to Composer:
 
-```bash
-php composer.phar require "ongr/router-bundle" "~0.1"
-```
+.. code-block:: bash
 
-```php
-// app/AppKernel.php
+    php composer.phar require "ongr/router-bundle" "~0.1"
+..
 
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new ONGR\RouterBundle(),
-    );
-}
-```
+.. code-block:: php
+
+    // app/AppKernel.php
+    
+    public function registerBundles()
+    {
+        $bundles = array(
+            // ...
+            new ONGR\RouterBundle(),
+        );
+    }
+..

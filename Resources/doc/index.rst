@@ -7,32 +7,34 @@ For example:
 
 Visiting `/shorts/a-bit-overpriced-shorts.html` can be configured to open:
 
-```php
-public function productAction(Document\Product $product, $seoKey) {
-    // Note, that $product has already been resolved automatically to contain actual document from ElasticsearchBundle.
-    // See explanation for $seoKey below.
-}
-```
+.. code-block:: php
+
+    public function productAction(Document\Product $product, $seoKey) {
+        // Note, that $product has already been resolved automatically to contain actual document from ElasticsearchBundle.
+        // See explanation for $seoKey below.
+    }
+..
 
 Matched product:
 
-```json
-{
-    "name": "Overpriced Shorts",
-    ...
-    "url": [
-        {
-	        "url": "/summer/a-bit-overpriced-shorts.html", 
-	        "key": "summer"
-        },
-        {
-	        "url": "/shorts/a-bit-overpriced-shorts.html", 
-	        "key": "shorts"
-        }
-    ],
-    ...
-}
-```
+.. code-block:: json
+
+    {
+        "name": "Overpriced Shorts",
+        ...
+        "url": [
+            {
+                "url": "/summer/a-bit-overpriced-shorts.html", 
+                "key": "summer"
+            },
+            {
+                "url": "/shorts/a-bit-overpriced-shorts.html", 
+                "key": "shorts"
+            }
+        ],
+        ...
+    }
+..
 
 SEO keys can be used when rendering URLs. See explanation further in the document.
 
@@ -42,15 +44,16 @@ SEO keys can be used when rendering URLs. See explanation further in the documen
 
 To enable SEO URLs for selected document type, please include `SeoAwareTrait`:
 
-```php
-class TestModel extends BaseModel
-{
-    use SeoAwareTrait; 
-    // Above adds public $url and $expiredUrl fields.
+.. code-block:: php
 
-	// Other fields ...
-}
-```
+    class TestModel extends BaseModel
+    {
+        use SeoAwareTrait; 
+        // Above adds public $url and $expiredUrl fields.
+    
+        // Other fields ...
+    }
+..
 
 ### Routing
 
@@ -58,30 +61,32 @@ Parameters are handled though configuration tree in `app/config.yml` file.
 
 Example:
 
-```yaml
-# Meta route that is called by OngrRouterBundle.
-ongr_product:
-    pattern:  /productDocument/{document}/ # This pattern is ignored and required for compatibility with Symfony.
-    defaults: { _controller: ONGRDemoBundle:Product:document }
+.. code-block:: yaml
 
-# Actual route for accessing by document id (not SEO).
-ongr_product_show:
-    pattern:  /product/{id}
-    defaults: { _controller: ONGRDemoBundle:Product:show }
-    requirements:
-        page:  \d+
-```
+    # Meta route that is called by OngrRouterBundle.
+    ongr_product:
+        pattern:  /productDocument/{document}/ # This pattern is ignored and required for compatibility with Symfony.
+        defaults: { _controller: ONGRDemoBundle:Product:document }
+    
+    # Actual route for accessing by document id (not SEO).
+    ongr_product_show:
+        pattern:  /product/{id}
+        defaults: { _controller: ONGRDemoBundle:Product:show }
+        requirements:
+            page:  \d+
+..
 
-```yaml
-ongr_router:
-	es_manager: default
-	seo_routes:
-        product:
-            _route: ongr_product
-            _controller: ONGRDemoBundle:Product:document
-            _default_route: ongr_product_show
-            _id_param: documentId
-```
+.. code-block:: yaml
+
+    ongr_router:
+        es_manager: default
+        seo_routes:
+            product:
+                _route: ongr_product
+                _controller: ONGRDemoBundle:Product:document
+                _default_route: ongr_product_show
+                _id_param: documentId
+..
 
 Basic parameters for each routing configuration are:
 * `_route` - Main route for matching and generating SEO URLs.
@@ -95,9 +100,10 @@ Router manager is ElasticsearchBundle manager name which will be used to get doc
 
 Use Symfony's default generator to produce links to specific documents. For example:
 
-```twig
-<a href="{{ path('ongr_product', {'document': product, '_seo_key': 'summer'} }}">My Product</a>
-```
+.. code-block:: twig
+
+    <a href="{{ path('ongr_product', {'document': product, '_seo_key': 'summer'} }}">My Product</a>
+..
 
 Such template will generate SEO link to the document. Function `path` is just an example. You can also choose `url` or plain `$this->get('router')->generate(...)` generator.
 
@@ -109,26 +115,27 @@ Conroller action, document URLs and route parameters all have SEO key variable. 
 
 It is possible for the document to not have any SEO URLs defined. Therefore, it is recommended to include such action in the controller:
 
-```php
-public function productAction($productId) {
-    $product = $this->get('es.manager')->getRepository('product')->find($productId);
+.. code-block:: php
 
-    if ($productId === null) {
-        throw $this->createNotFoundException();
+    public function productAction($productId) {
+        $product = $this->get('es.manager')->getRepository('product')->find($productId);
+    
+        if ($productId === null) {
+            throw $this->createNotFoundException();
+        }
+    
+        return $this->render(
+            // Your template.
+            $this->getProductTemplate($product),
+            [
+                'product' => $product
+            ]
+        );
     }
-
-    return $this->render(
-	    // Your template.
-        $this->getProductTemplate($product),
-        [
-            'product' => $product
-        ]
-    );
- }
-```
+..
 
 SEO generator will use this action and it's associated route to produce URL from `ongr_product_show` or similar route defined in `_default_route`. This route and action will use document ID as it's fallback argument, not SEO URL.
 
 ### Setup
 
-Setup documentation for the Router bundle is available [here](setup.rst).
+Setup documentation for the Router bundle is available `here <setup.rst>`_.
