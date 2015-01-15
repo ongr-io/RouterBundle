@@ -10,7 +10,8 @@ Contents:
 
     *
     
-## Introduction
+Introduction
+------------
 
 RouterBundle provides URLs transformation functionality to ONGR platform. This can be used for generating nice URLs for products, categories or any document. Beautiful URLs helps SEO and improves user's usability experience.
 
@@ -49,9 +50,11 @@ Matched product:
 
 SEO keys can be used when rendering URLs. See explanation further in the document.
 
-## Configuring
+Configuring
+-----------
 
-### Document fields
+Document fields
+~~~~~~~~~~~~~~~
 
 To enable SEO URLs for selected document type, please include `SeoAwareTrait`:
 
@@ -66,7 +69,8 @@ To enable SEO URLs for selected document type, please include `SeoAwareTrait`:
     }
 ..
 
-### Routing
+Routing
+~~~~~~~
 
 Parameters are handled though configuration tree in `app/config.yml` file.
 
@@ -107,7 +111,8 @@ Basic parameters for each routing configuration are:
 
 Router manager is ElasticsearchBundle manager name which will be used to get documents.
 
-### Generating URL
+Generating URL
+~~~~~~~~~~~~~~
 
 Use Symfony's default generator to produce links to specific documents. For example:
 
@@ -118,11 +123,13 @@ Use Symfony's default generator to produce links to specific documents. For exam
 
 Such template will generate SEO link to the document. Function `path` is just an example. You can also choose `url` or plain `$this->get('router')->generate(...)` generator.
 
-### SEO key
+SEO key
+~~~~~~~
 
 Conroller action, document URLs and route parameters all have SEO key variable. Since document can have multiple SEO URLs, e. g. for multiple categories or sections, one can differentiate URLs by SEO key. It is optional, but key as a simple string can be passed to the URL generator (like in the example above). If the key is omitted, first document's URL is used.
 
-### Alternative action
+Alternative action
+~~~~~~~~~~~~~~~~~~
 
 It is possible for the document to not have any SEO URLs defined. Therefore, it is recommended to include such action in the controller:
 
@@ -147,6 +154,7 @@ It is possible for the document to not have any SEO URLs defined. Therefore, it 
 
 SEO generator will use this action and it's associated route to produce URL from `ongr_product_show` or similar route defined in `_default_route`. This route and action will use document ID as it's fallback argument, not SEO URL.
 
-### Setup
+Setup
+~~~~~
 
 Setup documentation for the Router bundle is available `here <setup.rst>`_.
