@@ -133,11 +133,13 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
         $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'match',
-                'redirect',
-                'getContext',
-            ])
+            ->setMethods(
+                [
+                    'match',
+                    'redirect',
+                    'getContext',
+                ]
+            )
             ->getMock();
         $parentMatcher
             ->expects($this->never())
@@ -314,11 +316,13 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
         $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'match',
-                'redirect',
-                'getContext',
-            ])
+            ->setMethods(
+                [
+                    'match',
+                    'redirect',
+                    'getContext',
+                ]
+            )
             ->getMock();
 
         $parentMatcher
@@ -447,11 +451,13 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
         $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'match',
-                'redirect',
-                'getContext',
-            ])
+            ->setMethods(
+                [
+                    'match',
+                    'redirect',
+                    'getContext',
+                ]
+            )
             ->getMock();
         $parentMatcher
             ->expects($this->once())
@@ -487,11 +493,13 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
         $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'match',
-                'redirect',
-                'getContext',
-            ])
+            ->setMethods(
+                [
+                    'match',
+                    'redirect',
+                    'getContext',
+                ]
+            )
             ->getMock();
 
         /** @var Manager|\PHPUnit_Framework_MockObject_MockObject $manager */

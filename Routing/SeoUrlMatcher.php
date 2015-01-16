@@ -111,8 +111,8 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
                     throw $e;
                 }
 
-                if (is_array($document->getExpiredUrls()) &&
-                    in_array($this->getUrlHash($url), $document->getExpiredUrls())
+                if (is_array($document->getExpiredUrls())
+                    && in_array($this->getUrlHash($url), $document->getExpiredUrls())
                 ) {
                     if ($documentSeoKey === false) {
                         return $this->doRedirect(
