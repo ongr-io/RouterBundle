@@ -227,7 +227,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             'stdclass' => [
                 '_controller' => 'testModelTestHandler',
                 '_route' => 'testModelTestRoute',
-            ]
+            ],
         ];
 
         // Case #0.
@@ -387,7 +387,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
                 // Should be document name f.e product, content. stdclass for testing purposes.
                 '_controller' => 'testModelTestHandler',
                 '_route' => 'testModelTestRoute',
-            ]
+            ],
         ];
 
         // Case 1 - document doesn't have urls.
