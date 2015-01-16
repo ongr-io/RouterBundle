@@ -14,9 +14,9 @@ Add to Composer:
     
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             // ...
             new ONGR\RouterBundle(),
-        );
+        ];
     }
 ..

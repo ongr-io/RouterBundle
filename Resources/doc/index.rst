@@ -4,7 +4,6 @@ Router Bundle
 Contents:
 
 .. toctree::
-    :maxdepth: 150
     :titlesonly:
     :glob:
 
@@ -17,7 +16,7 @@ RouterBundle provides URLs transformation functionality to ONGR platform. This c
 
 For example:
 
-Visiting `/shorts/a-bit-overpriced-shorts.html` can be configured to open:
+Visiting ``/shorts/a-bit-overpriced-shorts.html`` can be configured to open:
 
 .. code-block:: php
 
@@ -56,7 +55,7 @@ Configuring
 Document fields
 ~~~~~~~~~~~~~~~
 
-To enable SEO URLs for selected document type, please include `SeoAwareTrait`:
+To enable SEO URLs for selected document type, please include ``SeoAwareTrait``:
 
 .. code-block:: php
 
@@ -72,7 +71,7 @@ To enable SEO URLs for selected document type, please include `SeoAwareTrait`:
 Routing
 ~~~~~~~
 
-Parameters are handled though configuration tree in `app/config.yml` file.
+Parameters are handled though configuration tree in ``app/config.yml`` file.
 
 Example:
 
@@ -104,10 +103,10 @@ Example:
 ..
 
 Basic parameters for each routing configuration are:
-* `_route` - Main route for matching and generating SEO URLs.
-* `_controller` - controller this route will use.
-* `_default_route` - route which will be used if generating URL using RouterBundle fails. E. g. document has no SEO URLs assigned.
-* `_id_param` - id field to be passed to `_default_route`.
+* ``_route`` - Main route for matching and generating SEO URLs.
+* ``_controller`` - controller this route will use.
+* ``_default_route`` - route which will be used if generating URL using RouterBundle fails. E. g. document has no SEO URLs assigned.
+* ``_id_param`` - id field to be passed to ``_default_route``.
 
 Router manager is ElasticsearchBundle manager name which will be used to get documents.
 
@@ -121,7 +120,7 @@ Use Symfony's default generator to produce links to specific documents. For exam
     <a href="{{ path('ongr_product', {'document': product, '_seo_key': 'summer'} }}">My Product</a>
 ..
 
-Such template will generate SEO link to the document. Function `path` is just an example. You can also choose `url` or plain `$this->get('router')->generate(...)` generator.
+Such template will generate SEO link to the document. Function ``path`` is just an example. You can also choose ``url`` or plain ``$this->get('router')->generate(...)`` generator.
 
 SEO key
 ~~~~~~~
@@ -152,9 +151,9 @@ It is possible for the document to not have any SEO URLs defined. Therefore, it 
     }
 ..
 
-SEO generator will use this action and it's associated route to produce URL from `ongr_product_show` or similar route defined in `_default_route`. This route and action will use document ID as it's fallback argument, not SEO URL.
+SEO generator will use this action and it's associated route to produce URL from ``ongr_product_show`` or similar route defined in ``_default_route``. This route and action will use document ID as it's fallback argument, not SEO URL.
 
 Setup
 ~~~~~
 
-Setup documentation for the Router bundle is available `here <setup.rst>`_.
+Setup documentation for the Router bundle is available `<setup.rst>`_.
