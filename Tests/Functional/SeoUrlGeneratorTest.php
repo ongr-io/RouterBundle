@@ -27,28 +27,28 @@ class SeoUrlGeneratorTest extends ElasticsearchTestCase
                     [
                         '_id' => 'non_matching_id_1',
                         'id' => 'non_matching_id_1',
-                        'url' => [
+                        'urls' => [
                             ['url' => 'Product/Foo/Bär2/', 'key' => 'foo_bar'],
                         ],
-                        'expired_url' => [],
+                        'expired_urls' => [],
                     ],
                     [
                         '_id' => 'test_id',
                         'id' => 'test_id',
-                        'url' => [
+                        'urls' => [
                             ['url' => 'Product/Foo/Bär/', 'key' => 'foo_bar'],
                             ['url' => 'Product/Foö/Büg/', 'key' => 'foo_bug'],
                             ['url' => 'Product/Baz/', 'key' => 'baz'],
                             ['url' => 'Product/Baz/baz/', 'key' => 'baz_baz'],
                             ['url' => 'Product/Büz/bäß/', 'key' => 'buz_bas'],
                         ],
-                        'expired_url' => [],
+                        'expired_urls' => [],
                     ],
                     [
                         '_id' => 'non_matching_id_2',
                         'id' => 'non_matching_id_2',
-                        'url' => [],
-                        'expired_url' => [],
+                        'urls' => [],
+                        'expired_urls' => [],
                     ],
                 ],
             ],

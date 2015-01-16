@@ -25,12 +25,44 @@ class UrlObject
      *
      * @ES\Property(name="url", type="string", analyzer="urlAnalyzer")
      */
-    public $url;
+    protected $url;
 
     /**
      * @var string Key.
      *
      * @ES\Property(name="key", type="string", index="no")
      */
-    public $key;
+    protected $key;
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
 }

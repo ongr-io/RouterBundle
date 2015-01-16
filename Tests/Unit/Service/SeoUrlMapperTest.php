@@ -11,8 +11,10 @@
 
 namespace ONGR\RouterBundle\Tests\Unit\Service;
 
-use ONGR\ElasticsearchBundle\Document\DocumentInterface;
+use ONGR\RouterBundle\Document\SeoAwareTrait;
+use ONGR\RouterBundle\Document\UrlObject;
 use ONGR\RouterBundle\Service\SeoUrlMapper;
+use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document\Product;
 
 /**
  * Tests for url mapper class.
@@ -29,7 +31,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
         $out = [];
 
         // Case #0: document without urls.
-        $document = $this->getEmptyDocument();
+        $document = $this->getEmptyProductDocument();
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'url1',
@@ -37,7 +39,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Case #1: key exists.
-        $document = $this->getDocument();
+        $document = $this->getProductDocument();
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'url1',
@@ -45,7 +47,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Case #2: key does not exist.
-        $document = $this->getDocument();
+        $document = $this->getProductDocument();
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'non-existing-url-key',
@@ -58,9 +60,9 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * Method test getLinkByKey().
      *
-     * @param object      $document        Document.
-     * @param string      $requestedUrlKey Requested url.
-     * @param string|bool $expectedUrl     Expected url or false.
+     * @param SeoAwareTrait $document        Document.
+     * @param string        $requestedUrlKey Requested url.
+     * @param string|bool   $expectedUrl     Expected url or false.
      *
      * @dataProvider getTestGetLinkByKeyCases
      */
@@ -81,7 +83,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
         $out = [];
 
         // Case #0: document without urls.
-        $document = $this->getEmptyDocument();
+        $document = $this->getEmptyProductDocument();
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'url1',
@@ -90,15 +92,15 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
 
         // Case #1: url does not exist (neither identical nor similar),
         // so the first url key from the list should be returned.
-        $document = $this->getDocument();
+        $document = $this->getProductDocument();
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'non-existing-url/',
-            'expectedUrl' => reset($document->url)->key,
+            'expectedUrl' => reset($document->getUrls())->getKey(),
         ];
 
         // Case #2: identical url exists.
-        $document = $this->getDocument();
+        $document = $this->getProductDocument();
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'seo1/',
@@ -106,7 +108,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Case #3: case insensitive version of the url exists.
-        $document = $this->getDocument();
+        $document = $this->getProductDocument();
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'Seo1/',
@@ -119,9 +121,9 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * Method to test checkDocumentUrlExists().
      *
-     * @param object      $document     Document.
-     * @param string      $requestedUrl Requested url.
-     * @param string|bool $expectedUrl  Expected url or false.
+     * @param SeoAwareTrait $document     Document.
+     * @param string        $requestedUrl Requested url.
+     * @param string|bool   $expectedUrl  Expected url or false.
      *
      * @dataProvider getTestCheckDocumentUrlExistsCases
      */
@@ -135,24 +137,24 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns fake document object with urls.
      *
-     * @return \stdClass
+     * @return Product
      */
-    private function getDocument()
+    private function getProductDocument()
     {
-        $url1 = new \stdClass();
-        $url1->url = 'seo1/';
-        $url1->key = 'url1';
+        $url1 = new UrlObject();
+        $url1->setUrl('seo1/');
+        $url1->setKey('url1');
 
-        $url2 = new \stdClass();
-        $url2->url = 'seo2/';
-        $url2->key = 'url2';
+        $url2 = new UrlObject();
+        $url2->setUrl('seo2/');
+        $url2->setKey('url2');
 
-        $url3 = new \stdClass();
-        $url3->url = 'seo3/';
-        $url3->key = 'url3';
+        $url3 = new UrlObject();
+        $url3->setUrl('seo3/');
+        $url3->setKey('url3');
 
-        $document = new \stdClass();
-        $document->url = new \ArrayIterator([$url1, $url2, $url3]);
+        $document = new Product();
+        $document->setUrls(new \ArrayIterator([$url1, $url2, $url3]));
 
         return $document;
     }
@@ -160,11 +162,11 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * Fake document without urls.
      *
-     * @return DocumentInterface $document
+     * @return Product $document
      */
-    private function getEmptyDocument()
+    private function getEmptyProductDocument()
     {
-        $document = new \stdClass();
+        $document = new Product();
 
         return $document;
     }

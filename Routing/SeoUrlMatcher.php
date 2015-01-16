@@ -11,15 +11,14 @@
 
 namespace ONGR\RouterBundle\Routing;
 
-use ONGR\ElasticsearchBundle\Document\DocumentInterface;
 use ONGR\ElasticsearchBundle\DSL\Query\MatchQuery;
 use ONGR\ElasticsearchBundle\DSL\Query\TermQuery;
 use ONGR\ElasticsearchBundle\DSL\Search;
 use ONGR\ElasticsearchBundle\ORM\Manager;
+use ONGR\RouterBundle\Document\SeoAwareTrait;
 use ONGR\RouterBundle\Service\SeoUrlMapper;
 use Symfony\Bundle\FrameworkBundle\Routing\RedirectableUrlMatcher;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
 
 /**
  * URL matcher with extended functionality for document matching.
@@ -29,7 +28,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
     const SCHEME_HTTP = 'http';
 
     /**
-     * @var RedirectableUrlMatcherInterface
+     * @var RedirectableUrlMatcher
      */
     protected $cachedMatcher = null;
 
@@ -102,15 +101,19 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
             $result = $this->getDocumentByUrl($url);
 
             if ($result !== null) {
+                /** @var SeoAwareTrait $document */
                 list($documentName, $document) = $result;
                 list($documentSeoKey, $documentLink) = $this->getLink($document, $url);
 
                 // Url doesn't exist.
-                if (empty($document->url) && $documentLink === false) {
+                $urls = $document->getUrls();
+                if (empty($urls) && $documentLink === false) {
                     throw $e;
                 }
 
-                if (is_array($document->expiredUrl) && in_array($this->getUrlHash($url), $document->expiredUrl)) {
+                if (is_array($document->getExpiredUrls()) &&
+                    in_array($this->getUrlHash($url), $document->getExpiredUrls())
+                ) {
                     if ($documentSeoKey === false) {
                         return $this->doRedirect(
                             $this->ensurePrefixSlash($documentLink),
@@ -155,8 +158,8 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
     /**
      * Hacky solution to get seo key and url.
      *
-     * @param DocumentInterface $document Document.
-     * @param string            $url      Url.
+     * @param SeoAwareTrait $document Document.
+     * @param string        $url      Url.
      *
      * @return array
      * @throws \LogicException
@@ -198,8 +201,8 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
         if ($url) {
             $search
-                ->addQuery(new MatchQuery($url, 'url.url'), 'should')
-                ->addQuery(new TermQuery('expired_url', $this->getUrlHash($url)), 'should');
+                ->addQuery(new MatchQuery($url, 'urls.url'), 'should')
+                ->addQuery(new TermQuery('expired_urls', $this->getUrlHash($url)), 'should');
         }
 
         return $search;
@@ -224,7 +227,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
             if ($document && isset($this->getTypeMap()[$documentName])) {
                 $out = [$documentName, $document];
-                if (!in_array($this->getUrlHash($url), $document->expiredUrl)) {
+                if (!in_array($this->getUrlHash($url), $document->getExpiredUrls())) {
                     break;
                 }
             }
@@ -274,7 +277,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
     }
 
     /**
-     * @return RedirectableUrlMatcherInterface
+     * @return RedirectableUrlMatcher
      */
     public function getCachedMatcher()
     {

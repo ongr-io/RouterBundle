@@ -11,8 +11,11 @@
 
 namespace ONGR\RouterBundle\Tests\Functional\Routing;
 
-use ONGR\RouterBundle\Document\SeoAwareTrait;
+use ONGR\ElasticsearchBundle\ORM\Manager;
+use ONGR\RouterBundle\Document\UrlObject;
 use ONGR\RouterBundle\Routing\SeoUrlMatcher;
+use ONGR\RouterBundle\Service\SeoUrlMapper;
+use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document\Product;
 use Symfony\Bundle\FrameworkBundle\Routing\RedirectableUrlMatcher;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RequestContext;
@@ -24,25 +27,22 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function getTestMatchData()
     {
-        /** @var SeoAwareTrait $object */
-        $object = new \stdClass();
-        // Should be document name f.e product, content. stdclass for testing purposes.
-        $testDocument = 'stdclass';
+        $object = new Product();
+        $testDocument = 'product';
 
-        $url1 = new \stdClass();
-        $url1->url = 'test/';
-        $url1->key = 'test_key';
+        $url1 = new UrlObject();
+        $url1->setUrl('test/');
+        $url1->setKey('test_key');
 
-        $object->expiredUrl = [];
-        $object->url = new \ArrayIterator([$url1]);
+        $object->setExpiredUrls([]);
+        $object->setUrls(new \ArrayIterator([$url1]));
 
-        /** @var SeoAwareTrait $expiredUrlObject */
-        $expiredUrlObject = new \stdClass(null);
-        $expiredUrlObject->expiredUrl = [md5('test/')];
+        $expiredUrlObject = new Product();
+        $expiredUrlObject->setExpiredUrls([md5('test/')]);
 
-        $url2 = new \stdClass();
-        $url2->url = 'test2/';
-        $expiredUrlObject->url = new \ArrayIterator([$url2]);
+        $url2 = new UrlObject();
+        $url2->setUrl('test2/');
+        $expiredUrlObject->setUrls(new \ArrayIterator([$url2]));
 
         return [
             // Case #0.
@@ -130,14 +130,15 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
     public function testMatch($map, $documentsData, $url, $seoMatch, $seek, $return = [])
     {
         // Parent matcher setup.
-        $parentMatcher = $this->getMock(
-            'Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface',
-            [
+        /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
+        $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
+            ->disableOriginalConstructor()
+            ->setMethods([
                 'match',
                 'redirect',
                 'getContext',
-            ]
-        );
+            ])
+            ->getMock();
         $parentMatcher
             ->expects($this->never())
             ->method('redirect');
@@ -170,6 +171,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['execute'])
             ->getMock();
 
+        /** @var Manager|\PHPUnit_Framework_MockObject_MockObject $manager */
         $manager = $this
             ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
             ->disableOriginalConstructor()
@@ -223,66 +225,66 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $out = [];
 
         $map = [
-            // Should be document name f.e product, content. stdclass for testing purposes.
-            'stdclass' => [
+            // Should be document name f.e product, content. Product for testing purposes.
+            'product' => [
                 '_controller' => 'testModelTestHandler',
                 '_route' => 'testModelTestRoute',
             ],
         ];
 
         // Case #0.
-        $url1 = new \stdClass();
-        $url1->url = 'seo1/';
-        $url1->key = 'url1';
-        $document1 = new \stdClass(null);
-        $document1->url = new \ArrayIterator([$url1]);
-        $document1->expiredUrl = [md5(strtolower('seo2/'))];
+        $url1 = new UrlObject();
+        $url1->setUrl('seo1/');
+        $url1->setKey('url1');
+        $document1 = new Product();
+        $document1->setUrls(new \ArrayIterator([$url1]));
+        $document1->setExpiredUrls([md5(strtolower('seo2/'))]);
         $out[] = ['seo2/', $map, [$document1], 'testModelTestRoute', '/seo1/'];
 
         // Case #1 (not all urls expired).
-        $url2 = new \stdClass();
-        $url2->url = 'seo1/';
-        $url2->key = 'url1';
-        $document2 = new \stdClass(null);
-        $document2->url = new \ArrayIterator([$url2]);
-        $document2->expiredUrl = [md5(strtolower('seo2/')), md5(strtolower('seo1/'))];
+        $url2 = new UrlObject();
+        $url2->setUrl('seo1/');
+        $url2->setKey('url1');
+        $document2 = new Product();
+        $document2->setUrls(new \ArrayIterator([$url2]));
+        $document2->setExpiredUrls([md5(strtolower('seo2/')), md5(strtolower('seo1/'))]);
         $out[] = ['seo2/', $map, [$document2], 'testModelTestRoute', '/seo1/'];
 
         // Case #2 - lowercase existing seo url.
-        $url3 = new \stdClass();
-        $url3->url = 'Seo1/';
-        $url3->key = 'url1';
-        $document3 = new \stdClass(null);
-        $document3->url = new \ArrayIterator([$url3]);
-        $document3->expiredUrl = [];
+        $url3 = new UrlObject();
+        $url3->setUrl('Seo1/');
+        $url3->setKey('url1');
+        $document3 = new Product();
+        $document3->setUrls(new \ArrayIterator([$url3]));
+        $document3->setExpiredUrls([]);
         $out[] = ['seo1/', $map, [$document3], 'testModelTestRoute', '/Seo1/'];
 
         // Case #3 - trailing slash missing on existing url.
-        $url4 = new \stdClass();
-        $url4->url = 'Seo1/';
-        $url4->key = 'url1';
-        $document4 = new \stdClass(null);
-        $document4->url = new \ArrayIterator([$url4]);
-        $document4->expiredUrl = [];
+        $url4 = new UrlObject();
+        $url4->setUrl('Seo1/');
+        $url4->setKey('url1');
+        $document4 = new Product();
+        $document4->setUrls(new \ArrayIterator([$url4]));
+        $document4->setExpiredUrls([]);
         $out[] = ['seo1', $map, [$document4], 'testModelTestRoute', '/Seo1/'];
 
         // Case #4 - redirect to original url, which is not necessarily the first one.
-        $url51 = new \stdClass();
-        $url51->url = 'Seo1/';
-        $url51->key = 'url1';
-        $url52 = new \stdClass();
-        $url52->url = 'Seo2/';
-        $url52->key = 'url2';
+        $url51 = new UrlObject();
+        $url51->setUrl('Seo1/');
+        $url51->setKey('url1');
+        $url52 = new UrlObject();
+        $url52->setUrl('Seo2/');
+        $url52->setKey('url2');
 
-        $document5 = new \stdClass(null);
-        $document5->url = new \ArrayIterator([$url51, $url52]);
-        $document5->expiredUrl = [];
+        $document5 = new Product();
+        $document5->setUrls(new \ArrayIterator([$url51, $url52]));
+        $document5->setExpiredUrls([]);
         $out[] = ['seo2/', $map, [$document5], 'testModelTestRoute', '/Seo2/'];
 
         // Case #5 - expired url.
-        $document5 = new \stdClass(null);
-        $document5->url = new \ArrayIterator();
-        $document5->expiredUrl = [md5(strtolower('seo2/')), md5(strtolower('seo1/'))];
+        $document5 = new Product();
+        $document5->setUrls(new \ArrayIterator());
+        $document5->setExpiredUrls([md5(strtolower('seo2/')), md5(strtolower('seo1/'))]);
         $out[] = ['seo2/', $map, [$document5], 'testModelTestRoute', '/seo2/', false];
 
         return $out;
@@ -309,14 +311,15 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $expectedKey = null
     ) {
         // Matcher setup.
-        $parentMatcher = $this->getMock(
-            'Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface',
-            [
+        /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
+        $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
+            ->disableOriginalConstructor()
+            ->setMethods([
                 'match',
                 'redirect',
                 'getContext',
-            ]
-        );
+            ])
+            ->getMock();
 
         $parentMatcher
             ->expects($this->any())
@@ -355,6 +358,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->method('execute')
             ->will($this->returnValue($documentsData));
 
+        /** @var Manager|\PHPUnit_Framework_MockObject_MockObject $manager */
         $manager = $this
             ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
             ->disableOriginalConstructor()
@@ -383,17 +387,17 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $out = [];
 
         $map = [
-            'stdclass' => [
-                // Should be document name f.e product, content. stdclass for testing purposes.
+            'product' => [
+                // Should be document name f.e product, content. Product for testing purposes.
                 '_controller' => 'testModelTestHandler',
                 '_route' => 'testModelTestRoute',
             ],
         ];
 
         // Case 1 - document doesn't have urls.
-        $document = new \stdClass(null);
-        $document->url = [];
-        $document->expiredUrl = [md5(strtolower('seo2/')), md5(strtolower('seo1/'))];
+        $document = new Product();
+        $document->setUrls([]);
+        $document->setExpiredUrls([md5(strtolower('seo2/')), md5(strtolower('seo1/'))]);
         $out[] = ['seo2/', $map, [$document], 'testModelTestRoute', false];
 
         // Case 2 - document not found.
@@ -441,14 +445,14 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('https'));
 
         /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
-        $parentMatcher = $this->getMock(
-            'Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface',
-            [
+        $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
+            ->disableOriginalConstructor()
+            ->setMethods([
                 'match',
                 'redirect',
                 'getContext',
-            ]
-        );
+            ])
+            ->getMock();
         $parentMatcher
             ->expects($this->once())
             ->method('match')
@@ -461,6 +465,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('redirect');
 
+        /** @var Manager|\PHPUnit_Framework_MockObject_MockObject $manager */
         $manager = $this
             ->getMockBuilder('Elasticsearch\ORM\Manager')
             ->disableOriginalConstructor()
@@ -479,15 +484,17 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLinkWithoutUrlMapper()
     {
-        $parentMatcher = $this->getMock(
-            'Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface',
-            [
+        /** @var RedirectableUrlMatcher|\PHPUnit_Framework_MockObject_MockObject $parentMatcher */
+        $parentMatcher = $this->getMockBuilder('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher')
+            ->disableOriginalConstructor()
+            ->setMethods([
                 'match',
                 'redirect',
                 'getContext',
-            ]
-        );
+            ])
+            ->getMock();
 
+        /** @var Manager|\PHPUnit_Framework_MockObject_MockObject $manager */
         $manager = $this
             ->getMockBuilder('Elasticsearch\ORM\Manager')
             ->disableOriginalConstructor()
@@ -505,10 +512,11 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
      * @param string $url Url.
      * @param string $key Key.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return SeoUrlMapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getSeoUrlMapperMock($url = null, $key = null)
     {
+        /** @var SeoUrlMapper|\PHPUnit_Framework_MockObject_MockObject $seoUrlMapper */
         $seoUrlMapper = $this->getMock('ONGR\RouterBundle\Service\SeoUrlMapper');
         $seoUrlMapper->expects($this->any())->method('getLinkByKey')->will(
             $this->returnValue(isset($url) ? $url : null)

@@ -11,7 +11,8 @@
 
 namespace ONGR\RouterBundle\Service;
 
-use ONGR\ElasticsearchBundle\Document\DocumentInterface;
+use ONGR\RouterBundle\Document\SeoAwareTrait;
+use ONGR\RouterBundle\Document\UrlObject;
 
 /**
  * Searches URLs in document object.
@@ -21,17 +22,19 @@ class SeoUrlMapper
     /**
      * Method to get url by specified key.
      *
-     * @param DocumentInterface $document Document.
-     * @param string            $key      Url key.
+     * @param SeoAwareTrait $document Document.
+     * @param string        $key      Url key.
      *
      * @return string|bool
      */
     public function getLinkByKey($document, $key)
     {
-        if (!empty($document->url)) {
-            foreach ($document->url as $url) {
-                if ($url->key === $key) {
-                    return $url->url;
+        $urls = $document->getUrls();
+        if (!empty($urls)) {
+            /** @var UrlObject $url */
+            foreach ($urls as $url) {
+                if ($url->getKey() === $key) {
+                    return $url->getUrl();
                 }
             }
         }
@@ -42,25 +45,29 @@ class SeoUrlMapper
     /**
      * Searches document for url in case insensitive manner according to supplied url.
      *
-     * @param DocumentInterface $document     Document.
-     * @param string            $requestedUrl Requested url string.
+     * @param SeoAwareTrait $document     Document.
+     * @param string        $requestedUrl Requested url string.
      *
      * @return string|bool Document key or false if such not found.
      */
     public function checkDocumentUrlExists($document, $requestedUrl)
     {
-        if (!empty($document->url)) {
+        $urls = $document->getUrls();
+        if (!empty($urls)) {
             $requestedUrlLowercased = mb_strtolower($requestedUrl, 'UTF-8');
 
-            foreach ($document->url as $url) {
-                if ($requestedUrlLowercased === mb_strtolower($url->url, 'UTF-8')) {
-                    return $url->key;
+            /** @var UrlObject $url */
+            foreach ($urls as $url) {
+                if ($requestedUrlLowercased === mb_strtolower($url->getUrl(), 'UTF-8')) {
+                    return $url->getKey();
                 }
             }
 
-            $document->url->rewind();
+            $urls->rewind();
+            /** @var UrlObject $currentUrl */
+            $currentUrl = $urls->current();
 
-            return $document->url->current()->key;
+            return $currentUrl->getKey();
         }
 
         return false;

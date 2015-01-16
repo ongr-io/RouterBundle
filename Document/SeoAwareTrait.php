@@ -32,14 +32,46 @@ trait SeoAwareTrait
      *
      * @var UrlObject[]|\Iterator
      *
-     * @ES\Property(name="url", type="object", objectName="ONGRRouterBundle:UrlObject", multiple=true)
+     * @ES\Property(name="urls", type="object", objectName="ONGRRouterBundle:UrlObject", multiple=true)
      */
-    public $url;
+    protected $urls = [];
 
     /**
      * @var string[] Array of expired url hashes.
      *
-     * @ES\Property(name="expired_url", type="string")
+     * @ES\Property(name="expired_urls", type="string")
      */
-    public $expiredUrl;
+    protected $expiredUrls = [];
+
+    /**
+     * @return \Iterator|UrlObject[]
+     */
+    public function getUrls()
+    {
+        return $this->urls;
+    }
+
+    /**
+     * @param \Iterator|UrlObject[] $urls
+     */
+    public function setUrls($urls)
+    {
+        $this->urls = $urls;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExpiredUrls()
+    {
+        return $this->expiredUrls;
+    }
+
+    /**
+     * @param string[] $expiredUrls
+     */
+    public function setExpiredUrls($expiredUrls)
+    {
+        $this->expiredUrls = $expiredUrls;
+    }
 }
