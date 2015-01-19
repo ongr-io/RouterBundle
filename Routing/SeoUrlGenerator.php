@@ -12,6 +12,7 @@
 namespace ONGR\RouterBundle\Routing;
 
 use ONGR\RouterBundle\Document\SeoAwareTrait;
+use ONGR\RouterBundle\Document\UrlObject;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -100,7 +101,7 @@ class SeoUrlGenerator extends UrlGenerator
      */
     public static function getLinkByDocument($document, $key = null)
     {
-        $urls = $document->url;
+        $urls = $document->getUrls();
 
         if (!count($urls)) {
             return null;
@@ -108,9 +109,11 @@ class SeoUrlGenerator extends UrlGenerator
 
         if ($key !== null) {
             $keyUrl = null;
+            /** @var UrlObject $url */
             foreach ($urls as $url) {
-                if (!empty($url->key) && $url->key === $key) {
-                    $keyUrl = $url->url;
+                $urlKeyValue = $url->getKey();
+                if (!empty($urlKeyValue) && $urlKeyValue === $key) {
+                    $keyUrl = $url->getUrl();
                     break;
                 }
             }
@@ -120,7 +123,9 @@ class SeoUrlGenerator extends UrlGenerator
         }
 
         $urls->rewind();
+        /** @var UrlObject $currentUrl */
+        $currentUrl = $urls->current();
 
-        return $urls->current()->url;
+        return $currentUrl->getUrl();
     }
 }
