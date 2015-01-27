@@ -1,9 +1,7 @@
 ONGR router bundle
-================
+==================
 
-Documentation for ONGR Router Bundle is in `Resources/doc/index.md`
-
-[Read the documentation for 0.1.x (master)](https://github.com/ongr-io/RouterBundle/blob/master/Resources/doc/index.md)
+[Read the documentation in readthedocs.org (master)](https://ongr.readthedocs.org/en/latest/components/RouterBundle/Resources/doc/index.html)
 
 License
 -------
