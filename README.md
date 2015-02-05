@@ -1,7 +1,7 @@
 ONGR router bundle
 ==================
 
-[Read the documentation in readthedocs.org (master)](https://ongr.readthedocs.org/en/latest/components/RouterBundle/Resources/doc/index.html)
+[Read the documentation in readthedocs.org (master)](http://ongr.readthedocs.org/en/latest/components/RouterBundle/index.html)
 
 License
 -------
