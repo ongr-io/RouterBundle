@@ -16,7 +16,8 @@ Add to Composer:
     {
         $bundles = [
             // ...
-            new ONGR\RouterBundle(),
+            new ONGR\RouterBundle\ONGRRouterBundle(),
+            new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
         ];
     }
 ..
