@@ -59,7 +59,7 @@ To enable SEO URLs for selected document type, please include ``SeoAwareTrait``:
 
 .. code-block:: php
 
-    class TestModel extends BaseModel
+    class TestDocument extends BaseDocument
     {
         use SeoAwareTrait; 
         // Above adds public $url and $expiredUrl fields.
