@@ -23,7 +23,7 @@ class UrlObject
     /**
      * @var string URL.
      *
-     * @ES\Property(name="url", type="string", analyzer="urlAnalyzer")
+     * @ES\Property(name="url", type="string", index="not_analyzed")
      */
     protected $url;
 
