@@ -11,11 +11,22 @@
 
 namespace ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\DependencyInjection\Compiler\DocumentLoaderPass;
 
 /**
  * Bundle.
  */
 class AcmeTestBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new DocumentLoaderPass());
+    }
 }

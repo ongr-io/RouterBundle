@@ -36,6 +36,7 @@ class ONGRRouterExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('ongr_router.manager', $config['es_manager']);
+        $container->setParameter('ongr_router.url_key', $config['url_key']);
         $container->setParameter('ongr_router.seo_route', $config['seo_routes']);
     }
 }

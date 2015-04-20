@@ -28,3 +28,8 @@ ongr_router:
             _controller: AcmeTestBundle:Test:testDocument
             _default_route: ongr_test_show
             _id_param: documentId
+        productwithnestedurl:
+            _route: ongr_test_document_page_nested
+            _controller: AcmeTestBundle:Test:testDocument
+            _default_route: ongr_test_show
+            _id_param: documentId
