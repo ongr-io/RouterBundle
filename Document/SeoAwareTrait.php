@@ -32,7 +32,7 @@ trait SeoAwareTrait
      *
      * @var UrlObject[]|\Iterator
      *
-     * @ES\Property(name="urls", type="object", objectName="ONGRRouterBundle:UrlObject", multiple=true)
+     * @ES\Property(name="urls", type="nested", objectName="ONGRRouterBundle:UrlNested", multiple=true)
      */
     protected $urls = [];
 

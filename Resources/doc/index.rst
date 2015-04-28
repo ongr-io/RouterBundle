@@ -71,7 +71,7 @@ To enable SEO URLs for selected document type, please include ``SeoAwareTrait``:
 Routing
 ~~~~~~~
 
-Parameters are handled though configuration tree in ``app/config.yml`` file.
+First, routes needs to be defined in ``app/routing.yml`` file.
 
 Example:
 
@@ -89,6 +89,8 @@ Example:
         requirements:
             page:  \d+
 ..
+
+Parameters are handled though configuration tree in ``app/config.yml`` file.
 
 .. code-block:: yaml
 

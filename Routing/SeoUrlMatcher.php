@@ -11,7 +11,9 @@
 
 namespace ONGR\RouterBundle\Routing;
 
+use ONGR\ElasticsearchBundle\DSL\Bool\Bool;
 use ONGR\ElasticsearchBundle\DSL\Query\MatchQuery;
+use ONGR\ElasticsearchBundle\DSL\Query\NestedQuery;
 use ONGR\ElasticsearchBundle\DSL\Query\TermQuery;
 use ONGR\ElasticsearchBundle\DSL\Search;
 use ONGR\ElasticsearchBundle\ORM\Manager;
@@ -48,6 +50,11 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
     protected $allowHttps = false;
 
     /**
+     * @var string
+     */
+    protected $urlKey = null;
+
+    /**
      * @var SeoUrlMapper
      */
     protected $seoUrlMapper;
@@ -57,13 +64,15 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
      * @param Manager                $esManager     ES manager.
      * @param array                  $typeMap       Type map.
      * @param bool                   $allowHttps    Is https allowed.
+     * @param string                 $urlKey        Url key to search routes with.
      */
-    public function __construct($parentMatcher, $esManager, $typeMap, $allowHttps = false)
+    public function __construct($parentMatcher, $esManager, $typeMap, $allowHttps = false, $urlKey = null)
     {
         $this->cachedMatcher = $parentMatcher;
         $this->esManager = $esManager;
         $this->typeMap = array_change_key_case($typeMap, CASE_LOWER);
         $this->allowHttps = $allowHttps;
+        $this->urlKey = $urlKey;
     }
 
     /**
@@ -199,11 +208,19 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
     {
         $search = new Search();
 
-        if ($url) {
-            $search
-                ->addQuery(new MatchQuery('urls.url', $url), 'should')
-                ->addQuery(new TermQuery('expired_urls', $this->getUrlHash($url)), 'should');
+        if (!$url) {
+            return $search;
         }
+
+        $bool = new Bool();
+        $bool->addToBool(new MatchQuery('urls.url', $url));
+
+        if ($this->urlKey != null) {
+            $bool->addToBool(new TermQuery('urls.key', $this->urlKey));
+        }
+
+        $search->addQuery(new NestedQuery('urls', $bool), 'should');
+        $search->addQuery(new TermQuery('expired_urls', $this->getUrlHash($url)), 'should');
 
         return $search;
     }

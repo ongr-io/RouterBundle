@@ -16,10 +16,9 @@ use ONGR\ElasticsearchBundle\Annotation as ES;
 /**
  * Object for storing url / key pair.
  *
- * @deprecated use UrlNested instead, will be removed in 1.0
- * @ES\Object
+ * @ES\Nested
  */
-class UrlObject
+class UrlNested
 {
     /**
      * @var string URL.
@@ -31,7 +30,7 @@ class UrlObject
     /**
      * @var string Key.
      *
-     * @ES\Property(name="key", type="string", index="no")
+     * @ES\Property(name="key", type="string", index="not_analyzed")
      */
     protected $key;
 
