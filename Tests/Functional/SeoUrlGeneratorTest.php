@@ -11,10 +11,10 @@
 
 namespace ONGR\RouterBundle\Tests\Functional;
 
+use ONGR\ElasticsearchBundle\Document\AbstractDocument;
 use ONGR\ElasticsearchBundle\DSL\Filter\IdsFilter;
-use ONGR\ElasticsearchBundle\Test\ElasticsearchTestCase;
 
-class SeoUrlGeneratorTest extends ElasticsearchTestCase
+class SeoUrlGeneratorTest extends AbstractDocument
 {
     /**
      * {@inheritdoc}
@@ -28,7 +28,7 @@ class SeoUrlGeneratorTest extends ElasticsearchTestCase
                         '_id' => 'non_matching_id_1',
                         'id' => 'non_matching_id_1',
                         'urls' => [
-                            ['url' => 'Product/Foo/Bär2/', 'key' => 'foo_bar'],
+                            ['url' => 'Product/Foo/Bär2/', 'key' => 'de'],
                         ],
                         'expired_urls' => [],
                     ],
@@ -36,7 +36,7 @@ class SeoUrlGeneratorTest extends ElasticsearchTestCase
                         '_id' => 'test_id',
                         'id' => 'test_id',
                         'urls' => [
-                            ['url' => 'Product/Foo/Bär/', 'key' => 'foo_bar'],
+                            ['url' => 'Product/Foo/Bär/', 'key' => 'de'],
                             ['url' => 'Product/Foö/Büg/', 'key' => 'foo_bug'],
                             ['url' => 'Product/Baz/', 'key' => 'baz'],
                             ['url' => 'Product/Baz/baz/', 'key' => 'baz_baz'],
@@ -128,7 +128,7 @@ class SeoUrlGeneratorTest extends ElasticsearchTestCase
             'requestUrl' => '/Product/Foo/Bär/',
             'expectedUrl' => null,
             'redirect' => false,
-            'expectedResponse' => ['document_id' => 'test_id', 'seo_key' => 'foo_bar'],
+            'expectedResponse' => ['document_id' => 'test_id', 'seo_key' => 'de'],
         ];
 
         // Case #1: with redirect.
@@ -155,6 +155,17 @@ class SeoUrlGeneratorTest extends ElasticsearchTestCase
             'expectedResponse' => ['document_id' => 'test_id', 'seo_key' => 'foo_bug'],
         ];
 
+        // Case #4: no redirect, should load specified link with de seo_key.
+        $out[] = [
+            'requestUrl' => '/Product/Foo/Bär/',
+            'expectedUrl' => null,
+            'redirect' => false,
+            'expectedResponse' => ['document_id' => 'test_id', 'seo_key' => 'de'],
+
+            // Custom environment.
+            'environment' => 'test_de',
+        ];
+
         return $out;
     }
 
@@ -165,12 +176,13 @@ class SeoUrlGeneratorTest extends ElasticsearchTestCase
      * @param string $expectedUrl      If redirecting, test against this URL.
      * @param bool   $isRedirect       Test if response is redirect.
      * @param array  $expectedResponse Expected response from controller.
+     * @param string $environment      Custom environment.
      *
      * @dataProvider getTestUrlMatchCases()
      */
-    public function testUrlMatch($requestUrl, $expectedUrl, $isRedirect, $expectedResponse)
+    public function testUrlMatch($requestUrl, $expectedUrl, $isRedirect, $expectedResponse, $environment = 'test')
     {
-        $client = self::createClient();
+        $client = self::createClient(['environment' => $environment]);
         $client->request('GET', $requestUrl);
 
         $response = $client->getResponse();

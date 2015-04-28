@@ -11,7 +11,9 @@
 
 namespace ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\DependencyInjection\Compiler\DocumentLoaderPass;
 
 /**
  * Bundle.
