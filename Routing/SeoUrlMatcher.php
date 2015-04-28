@@ -201,7 +201,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
         if ($url) {
             $search
-                ->addQuery(new MatchQuery($url, 'urls.url'), 'should')
+                ->addQuery(new MatchQuery('urls.url', $url), 'should')
                 ->addQuery(new TermQuery('expired_urls', $this->getUrlHash($url)), 'should');
         }
 
