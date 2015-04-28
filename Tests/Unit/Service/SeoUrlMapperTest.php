@@ -96,7 +96,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'non-existing-url/',
-            'expectedUrl' => reset($document->getUrls())->getKey(),
+            'expectedUrl' => $document->getUrls()->current()->getKey(),
         ];
 
         // Case #2: identical url exists.

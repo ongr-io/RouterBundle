@@ -155,14 +155,6 @@ class SeoUrlGeneratorTest extends ElasticsearchTestCase
             'expectedResponse' => ['document_id' => 'test_id', 'seo_key' => 'foo_bug'],
         ];
 
-        // Case #4: should redirect to lowercased version.
-        $out[] = [
-            'requestUrl' => '/Product/BÜz/bÄß/',
-            'expectedUrl' => 'http://localhost/Product/Büz/bäß/',
-            'redirect' => true,
-            'expectedResponse' => ['document_id' => 'test_id', 'seo_key' => 'baz_bas'],
-        ];
-
         return $out;
     }
 
