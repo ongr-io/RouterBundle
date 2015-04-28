@@ -54,7 +54,8 @@ class Router extends BaseRouter
             parent::getMatcher(),
             $this->getESManager(),
             $this->container->getParameter('ongr_router.seo_route'),
-            $isAjax
+            $isAjax,
+            $this->container->getParameter('ongr_router.url_key')
         );
         $seoUrlMatcher->setSeoUrlMapper($this->container->get('ongr_router.seo_url_mapper'));
 

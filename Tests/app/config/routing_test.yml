@@ -5,3 +5,7 @@ ongr_test_show:
 ongr_test_document_page:
     pattern:  /testDocument/{document}
     defaults: { _controller: AcmeTestBundle:Test:testDocument }
+
+ongr_test_document_page_nested:
+    pattern:  /testDocumentNested/{document}
+    defaults: { _controller: AcmeTestBundle:Test:testDocument }

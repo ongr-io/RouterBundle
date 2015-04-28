@@ -1,0 +1,5 @@
+imports:
+    - { resource: config_test.yml }
+
+ongr_router:
+    url_key: foo_baz
