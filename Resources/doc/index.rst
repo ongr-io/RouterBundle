@@ -55,11 +55,11 @@ Configuring
 Document fields
 ~~~~~~~~~~~~~~~
 
-To enable SEO URLs for selected document type, please include ``SeoAwareTrait``:
+To enable SEO URLs for selected document type, please implement ``SeoAwareInterface`` and include ``SeoAwareTrait``:
 
 .. code-block:: php
 
-    class TestDocument extends BaseDocument
+    class TestDocument extends BaseDocument implements SeoAwareInterface
     {
         use SeoAwareTrait; 
         // Above adds public $url and $expiredUrl fields.
