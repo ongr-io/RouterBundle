@@ -20,8 +20,8 @@ Visiting ``/shorts/a-bit-overpriced-shorts.html`` can be configured to open:
 
 .. code-block:: php
 
-    public function productAction(Document\Product $product, $seoKey) {
-        // Note, that $product has already been resolved automatically to contain actual document from ElasticsearchBundle.
+    public function productAction(Document\Product $document, $seoKey) {
+        // Note, that $document has already been resolved automatically to contain actual document from ElasticsearchBundle.
         // See explanation for $seoKey below.
     }
 ..
