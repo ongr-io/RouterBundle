@@ -28,3 +28,4 @@ ongr_router:
             _controller: AcmeTestBundle:Test:testDocument
             _default_route: ongr_test_show
             _id_param: documentId
+            _no_document_patterns: [^/product/.+$]

@@ -11,10 +11,10 @@
 
 namespace ONGR\RouterBundle\Tests\Functional;
 
-use ONGR\ElasticsearchBundle\Document\AbstractDocument;
 use ONGR\ElasticsearchBundle\DSL\Filter\IdsFilter;
+use ONGR\ElasticsearchBundle\Test\AbstractElasticsearchTestCase;
 
-class SeoUrlGeneratorTest extends AbstractDocument
+class SeoUrlGeneratorTest extends AbstractElasticsearchTestCase
 {
     /**
      * {@inheritdoc}
@@ -164,6 +164,14 @@ class SeoUrlGeneratorTest extends AbstractDocument
 
             // Custom environment.
             'environment' => 'test_de',
+        ];
+
+        // Case #5: no redirect, should response with null document since _no_document_pattern was matched.
+        $out[] = [
+            'requestUrl' => '/product/no-document-pattern-matched',
+            'expectedUrl' => null,
+            'redirect' => false,
+            'expectedResponse' => ['document_id' => null, 'seo_key' => null],
         ];
 
         return $out;
