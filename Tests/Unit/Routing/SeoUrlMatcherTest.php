@@ -11,6 +11,7 @@
 
 namespace ONGR\RouterBundle\Tests\Functional\Routing;
 
+use ONGR\ElasticsearchBundle\Mapping\ClassMetadata;
 use ONGR\ElasticsearchBundle\ORM\Manager;
 use ONGR\RouterBundle\Document\UrlObject;
 use ONGR\RouterBundle\Routing\SeoUrlMatcher;
@@ -177,8 +178,24 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $manager = $this
             ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
             ->disableOriginalConstructor()
-            ->setMethods(['getRepository'])
+            ->setMethods(['getRepository', 'getDocumentMapping'])
             ->getMock();
+
+        /** @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $mapping */
+        $mapping = $this->getMockBuilder('ONGR\ElasticsearchBundle\Mapping\ClassMetadata')
+            ->disableOriginalConstructor()
+            ->setMethods(['getType'])
+            ->getMock();
+
+        reset($map);
+        $mapping->expects($this->any())
+            ->method('getType')
+            ->willReturn(key($map));
+
+        $manager
+            ->expects($this->any())
+            ->method('getDocumentMapping')
+            ->willReturn($mapping);
 
         if ($seek) {
             $repository
@@ -366,8 +383,24 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $manager = $this
             ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
             ->disableOriginalConstructor()
-            ->setMethods(['getRepository'])
+            ->setMethods(['getRepository', 'getDocumentMapping'])
             ->getMock();
+
+        /** @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $mapping */
+        $mapping = $this->getMockBuilder('ONGR\ElasticsearchBundle\Mapping\ClassMetadata')
+            ->disableOriginalConstructor()
+            ->setMethods(['getType'])
+            ->getMock();
+
+        reset($map);
+        $mapping->expects($this->any())
+            ->method('getType')
+            ->willReturn(key($map));
+
+        $manager
+            ->expects($this->any())
+            ->method('getDocumentMapping')
+            ->willReturn($mapping);
 
         $manager
             ->expects($this->atLeastOnce())
