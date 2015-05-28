@@ -46,7 +46,7 @@ class TestController extends Controller
     public function testDocumentAction($document, $seoKey)
     {
         $response = new JsonResponse();
-        $response->setData(['document_id' => $document->getId(), 'seo_key' => $seoKey]);
+        $response->setData(['document_id' => $document ? $document->getId() : null, 'seo_key' => $seoKey]);
 
         return $response;
     }

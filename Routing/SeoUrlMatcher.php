@@ -146,6 +146,21 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
                 );
             }
 
+            // Check for _no_document_pattern fallback.
+            $url = rawurldecode($pathinfo);
+            foreach ($this->getTypeMap() as $typeMap) {
+                if (empty($typeMap['_no_document_patterns'])) {
+                    continue;
+                }
+
+                foreach ($typeMap['_no_document_patterns'] as $pattern) {
+                    $pattern = "~{$pattern}~";
+                    if (preg_match($pattern, $url)) {
+                        return array_merge($typeMap, ['document' => null, 'seoKey' => null]);
+                    }
+                }
+            }
+
             throw $e;
         }
     }

@@ -52,6 +52,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                     '_controller' => 'val2',
                     '_default_route' => 'val3',
                     '_id_param' => 'val4',
+                    '_no_document_patterns' => [],
                 ],
             ],
         ];
