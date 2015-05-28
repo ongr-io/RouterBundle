@@ -240,10 +240,11 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
         /** @var SeoAwareTrait $document */
         foreach ($repository->execute($this->getSearch($url)) as $document) {
-            $documentName = strtolower(preg_replace('/.*([\w]+)$/U', '$1', get_class($document)));
+            $mapping = $this->getEsManager()->getDocumentMapping($document);
+            $type = $mapping->getType();
 
-            if ($document && isset($this->getTypeMap()[$documentName])) {
-                $out = [$documentName, $document];
+            if ($document && isset($this->getTypeMap()[$type])) {
+                $out = [$type, $document];
                 if (!in_array($this->getUrlHash($url), $document->getExpiredUrls())) {
                     break;
                 }
