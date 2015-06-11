@@ -34,9 +34,13 @@ class ONGRRouterExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('config.yml');
         $loader->load('services.yml');
+        $loader->load('router.yml');
 
         $container->setParameter('ongr_router.manager', $config['es_manager']);
         $container->setParameter('ongr_router.seo_key', $config['seo_key']);
         $container->setParameter('ongr_router.seo_route', $config['seo_routes']);
+        $container->setParameter('ongr_router.use_chain_router', $config['use_chain_router']);
+        $container->setParameter('ongr_router.add_default_router', $config['add_default_router']);
+        $container->setParameter('ongr_router.add_ongr_router', $config['add_ongr_router']);
     }
 }

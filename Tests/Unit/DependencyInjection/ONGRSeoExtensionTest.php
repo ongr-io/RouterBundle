@@ -23,17 +23,23 @@ class ONGRSeoExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $out = [];
 
-        // Case #0 check if router class is set.
-        $out[] = ['router.class', 'ONGR\RouterBundle\Routing\Router'];
-
-        // Case #1 check if request context class is set.
+        // Case #0 check if request context class is set.
         $out[] = ['router.request_context.class', 'ONGR\RouterBundle\Routing\RequestContext'];
 
-        // Case #3 check if es manager is set.
+        // Case #1 check if es manager is set.
         $out[] = ['ongr_router.manager', 'default'];
 
-        // Case #4 check if seo routes is set.
+        // Case #2 check if seo routes is set.
         $out[] = ['ongr_router.seo_route', []];
+
+        // Case #3. Check if use_chain_router is set.
+        $out[] = ['ongr_router.use_chain_router', true];
+
+        // Case #4. Check if add_default_router is set.
+        $out[] = ['ongr_router.add_default_router', false];
+
+        // Case #5. Check if use_chain_router is set.
+        $out[] = ['ongr_router.add_ongr_router', true];
 
         return $out;
     }

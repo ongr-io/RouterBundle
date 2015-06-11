@@ -22,6 +22,6 @@ class RouterImplementationTest extends WebTestCase
     {
         $router = self::createClient()->getContainer()->get('router');
 
-        $this->assertInstanceOf('ONGR\RouterBundle\Routing\Router', $router);
+        $this->assertInstanceOf('Symfony\Cmf\Component\Routing\ChainRouter', $router);
     }
 }

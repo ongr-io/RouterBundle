@@ -1,0 +1,14 @@
+parameters:
+    ongr_router.chain_router.class: Symfony\Cmf\Component\Routing\ChainRouter
+    ongr_router.router.class: ONGR\RouterBundle\Routing\Router
+
+services:
+    ongr_router.chain_router:
+        class: %ongr_router.chain_router.class%
+        arguments: [ @?logger ]
+        calls:
+            - [ setContext, [ @router.request_context ] ]
+
+    ongr_router.router:
+        parent: router.default
+        class: %ongr_router.router.class%

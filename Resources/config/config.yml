@@ -1,5 +1,4 @@
 parameters:
-    router.class: ONGR\RouterBundle\Routing\Router
     router.request_context.class: ONGR\RouterBundle\Routing\RequestContext
 
     ongr_router.analyzers:
