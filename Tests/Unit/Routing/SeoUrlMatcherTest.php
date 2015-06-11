@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ONGR\RouterBundle\Tests\Functional\Routing;
+namespace ONGR\RouterBundle\Tests\Unit\Routing;
 
 use ONGR\ElasticsearchBundle\Mapping\ClassMetadata;
 use ONGR\ElasticsearchBundle\ORM\Manager;
@@ -18,7 +18,6 @@ use ONGR\RouterBundle\Routing\SeoUrlMatcher;
 use ONGR\RouterBundle\Service\SeoUrlMapper;
 use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document\Product;
 use Symfony\Bundle\FrameworkBundle\Routing\RedirectableUrlMatcher;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 
 class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
@@ -47,26 +46,34 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         return [
             // Case #0.
-            [[], [], 'test/', false, false],
+            [[], [], 'test/', false, true],
+            // Case #1.
             [
+                // Map.
                 [
                     $testDocument => [
                         '_controller' => 'testModelTestHandler',
                         '_route' => 'testModelTestRoute',
                     ],
                 ],
+                // Documents data.
                 [$object],
+                // Url.
                 'test/',
+                // Seo match.
                 true,
+                // Seek.
                 true,
+                // Return.
                 [
                     '_controller' => 'testModelTestHandler',
                     '_route' => 'testModelTestRoute',
                     'seoKey' => 'test_key',
                 ],
             ],
-            // Case #1.
+            // Case #2.
             [
+                // Map.
                 [
                     $testDocument => [
                         '_controller' => 'testModelTestHandler',
@@ -77,41 +84,43 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
                         '_route' => 'testModelTestRoute2',
                     ],
                 ],
+                // Documents data.
                 [$expiredUrlObject, $object],
+                // Url.
                 'test/',
+                // Seo match.
                 true,
+                // Seek.
                 true,
+                // Return.
                 [
                     '_controller' => 'testModelTestHandler',
                     '_route' => 'testModelTestRoute',
                     'seoKey' => 'test_key',
                 ],
             ],
-            // Case #2.
-            [
-                [
-                    $testDocument => [
-                        '_controller' => 'testModelTestHandler',
-                        '_route' => 'testModelTestRoute',
-                    ],
-                ],
-                [$object],
-                '',
-                false,
-                false,
-            ],
             // Case #3.
             [
+                // Map.
                 [
                     $testDocument => [
                         '_controller' => 'testModelTestHandler',
                         '_route' => 'testModelTestRoute',
                     ],
                 ],
+                // Documents data.
                 [$object],
-                '/',
+                // Url.
+                '',
+                // Seo match.
+                true,
+                // Seek.
                 false,
-                false,
+                // Return.
+                [
+                    '_controller' => 'testModelTestHandler',
+                    '_route' => 'testModelTestRoute',
+                ],
             ],
         ];
     }
@@ -136,36 +145,18 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                    'match',
                     'redirect',
                     'getContext',
                 ]
             )
             ->getMock();
         $parentMatcher
-            ->expects($this->never())
+            ->expects($this->any())
             ->method('redirect');
         $parentMatcher
             ->expects($this->any())
             ->method('getContext')
             ->will($this->returnValue(new RequestContext()));
-
-        if ($seoMatch) {
-            $parentMatcher
-                ->expects($this->once())
-                ->method('match')
-                ->will($this->throwException(new ResourceNotFoundException()));
-        } else {
-            $return = [
-                '_controller' => 'test',
-                '_route' => 'test',
-            ];
-            // Must call parent matcher once if no documents found.
-            $parentMatcher
-                ->expects($this->once())
-                ->method('match')
-                ->will($this->returnValue($return));
-        }
 
         // Elasticsearch setup.
         $repository = $this
@@ -197,19 +188,15 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->method('getDocumentMapping')
             ->willReturn($mapping);
 
-        if ($seek) {
-            $repository
-                ->expects($this->once())
-                ->method('execute')
-                ->will($this->returnValue($documentsData));
+        $repository
+            ->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue($documentsData));
 
-            $manager
-                ->expects($this->once())
-                ->method('getRepository')
-                ->will($this->returnValue($repository));
-        } else {
-            $manager->expects($this->never())->method('getRepository');
-        }
+        $manager
+            ->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($repository));
 
         // Matcher testing.
         $matcher = new SeoUrlMatcher($parentMatcher, $manager, $map);
@@ -218,6 +205,10 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $seoUrlMapper = $this->getSeoUrlMapperMock($url, isset($return['seoKey']) ? $return['seoKey'] : null);
         $matcher->setSeoUrlMapper($seoUrlMapper);
 
+
+        if (!$seoMatch) {
+            $this->setExpectedException('Symfony\Component\Routing\Exception\ResourceNotFoundException');
+        }
         $result = $matcher->match($url);
 
         $keys = ['_controller', '_route'];
@@ -347,9 +338,8 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             ->method('getContext')
             ->will($this->returnValue(new RequestContext()));
         $parentMatcher
-            ->expects($this->once())
-            ->method('match')
-            ->will($this->throwException(new ResourceNotFoundException()));
+            ->expects($this->never())
+            ->method('match');
 
         $testReturn = 'test';
 
@@ -493,9 +483,8 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $parentMatcher
-            ->expects($this->once())
-            ->method('match')
-            ->will($this->throwException(new ResourceNotFoundException()));
+            ->expects($this->never())
+            ->method('match');
         $parentMatcher
             ->expects($this->once())
             ->method('getContext')

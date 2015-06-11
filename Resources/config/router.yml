@@ -1,5 +1,5 @@
 parameters:
-    ongr_router.chain_router.class: Symfony\Cmf\Component\Routing\ChainRouter
+    ongr_router.chain_router.class: ONGR\RouterBundle\Routing\ChainRouter
     ongr_router.router.class: ONGR\RouterBundle\Routing\Router
 
 services:

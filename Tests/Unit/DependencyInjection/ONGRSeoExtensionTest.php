@@ -36,7 +36,7 @@ class ONGRSeoExtensionTest extends \PHPUnit_Framework_TestCase
         $out[] = ['ongr_router.use_chain_router', true];
 
         // Case #4. Check if add_default_router is set.
-        $out[] = ['ongr_router.add_default_router', false];
+        $out[] = ['ongr_router.add_default_router', true];
 
         // Case #5. Check if use_chain_router is set.
         $out[] = ['ongr_router.add_ongr_router', true];

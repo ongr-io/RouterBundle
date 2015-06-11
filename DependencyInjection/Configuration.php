@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                     ->info('Replace default Symfony router with chain router')
                 ->end()
                 ->booleanNode('add_default_router')
-                    ->defaultFalse()
+                    ->defaultTrue()
                     ->info('Add default Symfony router to chain')
                 ->end()
                 ->booleanNode('add_ongr_router')
