@@ -38,7 +38,7 @@ class ChainRouter extends CmfChainRouter
             }
         }
 
-        if ($debug) {
+        if ($debug->count()) {
             $debug = array_unique($debug->getArrayCopy());
             $info = implode(', ', $debug);
         } else {
