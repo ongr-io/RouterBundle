@@ -205,7 +205,6 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $seoUrlMapper = $this->getSeoUrlMapperMock($url, isset($return['seoKey']) ? $return['seoKey'] : null);
         $matcher->setSeoUrlMapper($seoUrlMapper);
 
-
         if (!$seoMatch) {
             $this->setExpectedException('Symfony\Component\Routing\Exception\ResourceNotFoundException');
         }
