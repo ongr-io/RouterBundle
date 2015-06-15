@@ -138,11 +138,10 @@ It is possible for the document to not have any SEO URLs defined. Therefore, it 
 
     public function productAction($productId) {
         $product = $this->get('es.manager')->getRepository('product')->find($productId);
-    
-        if ($productId === null) {
+        if ($product === null) {
             throw $this->createNotFoundException();
         }
-    
+
         return $this->render(
             // Your template.
             $this->getProductTemplate($product),
