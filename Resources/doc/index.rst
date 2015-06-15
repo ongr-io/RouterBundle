@@ -154,6 +154,41 @@ It is possible for the document to not have any SEO URLs defined. Therefore, it 
 
 SEO generator will use this action and it's associated route to produce URL from ``ongr_product_show`` or similar route defined in ``_default_route``. This route and action will use document ID as it's fallback argument, not SEO URL.
 
+Chain Router
+~~~~~~~~~~~~
+
+Ongr bundle uses Symfony CMF chain router for route handling. More information about chain router can be found at
+`CMF Routing documentation <http://symfony.com/doc/current/cmf/components/routing/index.html>`_.
+
+By default bundle replaces Symfony routing with chain router with ONGR router for documents and default Symfony router
+in chain. This can be changed in configuration by setting corresponding settings.
+
+.. code-block:: yaml
+
+    ongr_router:
+        use_chain_router: true # Replace default Symfony router with chain router.
+        add_default_router: true # Add default Symfony router to chain.
+        add_ongr_router: true # Add ONGR router to chain.
+        # ...
+
+..
+
+To add router into chain tag new router with ``router`` tag. Priority attribute is optional and defaults to 0.
+Routers with higher priority will be executed first.
+
+.. code-block:: yaml
+
+    tags:
+        - { name: router, priority: 0 }
+
+..
+
+.. note::
+
+    Symfony router will be added with priority ``100`` and ONGR router with ``-100``.
+
+..
+
 Setup
 ~~~~~
 
