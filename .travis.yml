@@ -8,6 +8,7 @@ services:
 install:
     - sudo pip install -q sphinx --use-mirrors
     - wget -q -O conf.py https://raw.githubusercontent.com/ongr-io/docs-aggregator/master/source/conf-travis.py
+    - composer self-update
 before_script:
     - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
     - composer install

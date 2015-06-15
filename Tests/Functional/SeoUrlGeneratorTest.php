@@ -13,6 +13,7 @@ namespace ONGR\RouterBundle\Tests\Functional;
 
 use ONGR\ElasticsearchBundle\DSL\Filter\IdsFilter;
 use ONGR\ElasticsearchBundle\Test\AbstractElasticsearchTestCase;
+use ONGR\RouterBundle\Routing\ChainRouter;
 
 class SeoUrlGeneratorTest extends AbstractElasticsearchTestCase
 {
@@ -205,5 +206,20 @@ class SeoUrlGeneratorTest extends AbstractElasticsearchTestCase
             $content = $response->getContent();
             $this->assertJsonStringEqualsJsonString(json_encode($expectedResponse), $content);
         }
+    }
+
+    /**
+     * Tests behavior of chain router generator for non existing route.
+     */
+    public function testChainGenerator()
+    {
+        /** @var ChainRouter $router */
+        $router = $this->getContainer()->get('router');
+
+        $this->setExpectedException(
+            'Symfony\Component\Routing\Exception\RouteNotFoundException',
+            'None of the chained routers were able to generate route: Route \'not_found\' not found'
+        );
+        $router->generate('not_found');
     }
 }
