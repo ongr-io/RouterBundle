@@ -28,7 +28,7 @@ class ChainRouter extends CmfChainRouter
     {
         $debug = new \ArrayObject();
         foreach ($this->all() as $router) {
-            if (!$this->isRouterCapable($name, $parameters, $absolute, $router)) {
+            if (!$this->isRouterCapable($name, $parameters, $router)) {
                 continue;
             }
 
@@ -80,12 +80,11 @@ class ChainRouter extends CmfChainRouter
     /**
      * @param string $name
      * @param array  $parameters
-     * @param bool   $absolute
      * @param object $router
      *
      * @return bool
      */
-    protected function isRouterCapable($name, $parameters, $absolute, $router)
+    protected function isRouterCapable($name, $parameters, $router)
     {
         if ($name && !is_string($name) && !$router instanceof VersatileGeneratorInterface) {
             return false;
@@ -111,7 +110,7 @@ class ChainRouter extends CmfChainRouter
      *
      * @return string
      */
-    protected function getErrorMessage($name, $router = null, $parameters = null)
+    protected function getErrorMessage($name, $router = null, $parameters = [])
     {
         if ($router instanceof VersatileGeneratorInterface) {
             $displayName = $router->getRouteDebugMessage($name, $parameters);
