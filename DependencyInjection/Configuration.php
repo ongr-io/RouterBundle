@@ -32,11 +32,11 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->booleanNode('use_chain_router')
+                ->booleanNode('enable')
                     ->defaultTrue()
                     ->info('Replace default Symfony router with chain router')
                 ->end()
-                ->booleanNode('add_default_router')
+                ->booleanNode('add_symfony_router')
                     ->defaultTrue()
                     ->info('Add default Symfony router to chain')
                 ->end()

@@ -166,8 +166,8 @@ in chain. This can be changed in configuration by setting corresponding settings
 .. code-block:: yaml
 
     ongr_router:
-        use_chain_router: true # Replace default Symfony router with chain router.
-        add_default_router: true # Add default Symfony router to chain.
+        enable: true # Replace default Symfony router with chain router.
+        add_symfony_router: true # Add default Symfony router to chain.
         add_ongr_router: true # Add ONGR router to chain.
         # ...
 

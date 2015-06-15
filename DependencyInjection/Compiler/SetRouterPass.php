@@ -26,16 +26,16 @@ class SetRouterPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         // Overwrite default router by alias only.
-        if ($container->hasParameter('ongr_router.use_chain_router')
-            && $container->getParameter('ongr_router.use_chain_router') === true
+        if ($container->hasParameter('ongr_router.enable')
+            && $container->getParameter('ongr_router.enable') === true
         ) {
             $container->setAlias('router', 'ongr_router.chain_router');
         }
 
         $chainRouter = $container->getDefinition('ongr_router.chain_router');
 
-        if ($container->hasParameter('ongr_router.add_default_router')
-            && $container->getParameter('ongr_router.add_default_router') === true
+        if ($container->hasParameter('ongr_router.add_symfony_router')
+            && $container->getParameter('ongr_router.add_symfony_router') === true
         ) {
             $chainRouter->addMethodCall('add', [new Reference('router.default'), 100]);
         }

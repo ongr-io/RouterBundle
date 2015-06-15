@@ -34,14 +34,14 @@ class SetRouterPassTest extends \PHPUnit_Framework_TestCase
         /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
         $container->expects($this->exactly(3))->method('hasParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
         )->willReturn(true, true, true);
 
         $container->expects($this->exactly(3))->method('getParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
         )->willReturnOnConsecutiveCalls(true, true, true);
 
@@ -62,14 +62,14 @@ class SetRouterPassTest extends \PHPUnit_Framework_TestCase
         /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
         $container->expects($this->exactly(3))->method('hasParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
         )->willReturn(true, true, true);
 
         $container->expects($this->exactly(3))->method('getParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
         )->willReturnOnConsecutiveCalls(false, false, false);
 
@@ -87,14 +87,14 @@ class SetRouterPassTest extends \PHPUnit_Framework_TestCase
         /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
         $container->expects($this->exactly(3))->method('hasParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
-        )->willReturn(true, true, true);
+        )->willReturnOnConsecutiveCalls(true, true, true);
 
         $container->expects($this->exactly(3))->method('getParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
         )->willReturnOnConsecutiveCalls(true, false, false);
 
@@ -112,14 +112,14 @@ class SetRouterPassTest extends \PHPUnit_Framework_TestCase
         /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
         $container->expects($this->exactly(3))->method('hasParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
-        )->willReturn(true, true, true);
+        )->willReturnOnConsecutiveCalls(true, true, true);
 
         $container->expects($this->exactly(3))->method('getParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
         )->willReturnOnConsecutiveCalls(false, true, false);
 
@@ -140,14 +140,14 @@ class SetRouterPassTest extends \PHPUnit_Framework_TestCase
         /** @var ContainerBuilder|\PHPUnit_Framework_MockObject_MockObject $container */
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
         $container->expects($this->exactly(3))->method('hasParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
-        )->willReturn(true, true, true);
+        )->willReturnOnConsecutiveCalls(true, true, true);
 
         $container->expects($this->exactly(3))->method('getParameter')->withConsecutive(
-            ['ongr_router.use_chain_router'],
-            ['ongr_router.add_default_router'],
+            ['ongr_router.enable'],
+            ['ongr_router.add_symfony_router'],
             ['ongr_router.add_ongr_router']
         )->willReturnOnConsecutiveCalls(false, false, true);
 
