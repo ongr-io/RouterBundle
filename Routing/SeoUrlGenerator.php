@@ -12,8 +12,8 @@
 namespace ONGR\RouterBundle\Routing;
 
 use ONGR\ElasticsearchBundle\Document\DocumentInterface;
-use ONGR\RouterBundle\Document\SeoAwareTrait;
-use ONGR\RouterBundle\Document\UrlObject;
+use ONGR\RouterBundle\Document\SeoAwareInterface;
+use ONGR\RouterBundle\Document\UrlNested;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -49,7 +49,7 @@ class SeoUrlGenerator extends UrlGenerator
     {
         foreach ($this->typeMap as $params) {
             if ($params['_route'] == $name) {
-                /** @var DocumentInterface $document */
+                /** @var DocumentInterface|SeoAwareInterface $document */
                 $document = $parameters['document'];
 
                 $key = null;
@@ -96,8 +96,8 @@ class SeoUrlGenerator extends UrlGenerator
     /**
      * Returns URL for a document.
      *
-     * @param SeoAwareTrait $document Document.
-     * @param string        $key      Optional URL key.
+     * @param SeoAwareInterface $document Document.
+     * @param string            $key      Optional URL key.
      *
      * @return string|null
      */
@@ -111,7 +111,7 @@ class SeoUrlGenerator extends UrlGenerator
 
         if ($key !== null) {
             $keyUrl = null;
-            /** @var UrlObject $url */
+            /** @var UrlNested $url */
             foreach ($urls as $url) {
                 $urlKeyValue = $url->getKey();
                 if (!empty($urlKeyValue) && $urlKeyValue === $key) {
@@ -125,7 +125,7 @@ class SeoUrlGenerator extends UrlGenerator
         }
 
         $urls->rewind();
-        /** @var UrlObject $currentUrl */
+        /** @var UrlNested $currentUrl */
         $currentUrl = $urls->current();
 
         return $currentUrl->getUrl();
