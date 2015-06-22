@@ -11,6 +11,7 @@
 
 namespace ONGR\RouterBundle\Routing;
 
+use ONGR\ElasticsearchBundle\Document\DocumentInterface;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
 use ONGR\RouterBundle\Document\UrlObject;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -48,6 +49,7 @@ class SeoUrlGenerator extends UrlGenerator
     {
         foreach ($this->typeMap as $params) {
             if ($params['_route'] == $name) {
+                /** @var DocumentInterface $document */
                 $document = $parameters['document'];
 
                 $key = null;
@@ -61,7 +63,7 @@ class SeoUrlGenerator extends UrlGenerator
                 if (!$link) {
                     if (isset($params['_default_route'])) {
                         unset($parameters['document']);
-                        $parameters[$params['_id_param']] = $document->id;
+                        $parameters[$params['_id_param']] = $document->getId();
 
                         return $this->parentGenerator->generate($params['_default_route'], $parameters, $absolute);
                     }
