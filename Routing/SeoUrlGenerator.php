@@ -14,6 +14,7 @@ namespace ONGR\RouterBundle\Routing;
 use ONGR\ElasticsearchBundle\Document\DocumentInterface;
 use ONGR\RouterBundle\Document\SeoAwareInterface;
 use ONGR\RouterBundle\Document\UrlNested;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -90,7 +91,7 @@ class SeoUrlGenerator extends UrlGenerator
             }
         }
 
-        return $this->parentGenerator->generate($name, $parameters, $absolute);
+        throw new RouteNotFoundException();
     }
 
     /**

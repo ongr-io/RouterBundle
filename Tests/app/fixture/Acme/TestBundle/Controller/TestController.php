@@ -50,4 +50,12 @@ class TestController extends Controller
 
         return $response;
     }
+
+    /**
+     * Action for default router.
+     */
+    public function testDefaultAction()
+    {
+        return new JsonResponse(['symfony_router' => true]);
+    }
 }

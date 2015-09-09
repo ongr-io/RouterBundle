@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Overrides default framework router.
  */
-class Router extends BaseRouter
+class Router extends BaseRouter implements VersatileParameterGeneratorInterface
 {
     /**
      * @var ContainerInterface

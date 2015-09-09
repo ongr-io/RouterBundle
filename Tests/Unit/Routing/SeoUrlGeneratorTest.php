@@ -128,7 +128,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
             'test' => 'test',
         ];
         $expect = false;
-        $out[] = [$typeMap, $name, $parameters, $expect];
+        $out[] = [$typeMap, $name, $parameters, $expect, false, false, true];
 
         // Case #5: should try to generate default link.
         $name = 'ongr_test_document_page';
@@ -223,6 +223,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
      * @param bool|string $expect      Expected url or false if should go to parent matcher.
      * @param string|bool $pController Controller.
      * @param array|bool  $pParameters Parameters.
+     * @param bool        $exception   Should throw exception.
      *
      * @dataProvider getGenerateTestCases()
      */
@@ -232,7 +233,8 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $parameters,
         $expect,
         $pController = false,
-        $pParameters = false
+        $pParameters = false,
+        $exception = false
     ) {
         $parent = $this->getMock(
             'Symfony\Component\Routing\Generator\UrlGeneratorInterface',
@@ -249,6 +251,9 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         if ($expect) {
             $parent->expects($this->never())->method('generate');
             $this->assertEquals($expect, $generator->generate($name, $parameters, true));
+        } elseif ($exception) {
+            $this->setExpectedException('Symfony\Component\Routing\Exception\RouteNotFoundException');
+            $generator->generate($name, $parameters, true);
         } else {
             if ($pController) {
                 $parent->expects($this->once())->method('generate')->with($pController, $pParameters, true)

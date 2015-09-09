@@ -32,6 +32,18 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->booleanNode('enable')
+                    ->defaultTrue()
+                    ->info('Replace default Symfony router with chain router')
+                ->end()
+                ->booleanNode('add_symfony_router')
+                    ->defaultTrue()
+                    ->info('Add default Symfony router to chain')
+                ->end()
+                ->booleanNode('add_ongr_router')
+                    ->defaultTrue()
+                    ->info('Add ongr router to chain')
+                ->end()
                 ->scalarNode('es_manager')
                     ->defaultValue('default')
                     ->info('Elasticsearch manager to use in router')

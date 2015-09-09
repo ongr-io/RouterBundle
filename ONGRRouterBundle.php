@@ -12,6 +12,8 @@
 namespace ONGR\RouterBundle;
 
 use ONGR\RouterBundle\DependencyInjection\Compiler\SeoAnalyzerAwarePass;
+use ONGR\RouterBundle\DependencyInjection\Compiler\SetRouterPass;
+use Symfony\Cmf\Component\Routing\DependencyInjection\Compiler\RegisterRoutersPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -27,6 +29,8 @@ class ONGRRouterBundle extends Bundle
     {
         parent::build($container);
 
+        $container->addCompilerPass(new SetRouterPass());
         $container->addCompilerPass(new SeoAnalyzerAwarePass());
+        $container->addCompilerPass(new RegisterRoutersPass('ongr_router.chain_router'));
     }
 }

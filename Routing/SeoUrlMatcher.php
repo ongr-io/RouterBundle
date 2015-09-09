@@ -96,58 +96,52 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
         /** @var RequestContext $context */
         $context = $this->getCachedMatcher()->getContext();
 
-        // Try to load default sf route first.
-        try {
-            return $this->getCachedMatcher()->match($pathinfo);
-        } catch (ResourceNotFoundException $e) {
-            // Default sf route not found.
-            if (!$this->allowHttps && $context->getScheme() != self::SCHEME_HTTP) {
-                throw new ResourceNotFoundException('Non-http urls are not processed', $e->getCode(), $e);
-            }
-
-            // Add trailing slash.
-            $url = preg_replace('/^([a-zA-Z0-9\-\/]+[^\/])$/', '$1/', $url);
-            $result = $this->getDocumentByUrl($url);
-
-            if ($result !== null) {
-                /** @var SeoAwareTrait $document */
-                list($documentName, $document) = $result;
-                list($documentSeoKey, $documentLink) = $this->getLink($document, $url);
-
-                // Url doesn't exist.
-                $urls = $document->getUrls();
-                if (empty($urls) && $documentLink === false) {
-                    throw $e;
-                }
-
-                if (is_array($document->getExpiredUrls())
-                    && in_array($this->getUrlHash($url), $document->getExpiredUrls())
-                ) {
-                    if ($documentSeoKey === false) {
-                        return $this->doRedirect(
-                            $this->ensurePrefixSlash($documentLink),
-                            $this->getTypeMap()[$documentName]['_route'],
-                            (!$this->allowHttps) ? self::SCHEME_HTTP : null
-                        );
-                    }
-                }
-
-                // Force redirect to original link, if links are not identical (lowercase, trailing slash).
-                if ($requestedUrlOriginal !== $documentLink) {
-                    return $this->doRedirect($documentLink, $this->getTypeMap()[$documentName]['_route']);
-                }
-
-                return array_merge(
-                    $this->getTypeMap()[$documentName],
-                    [
-                        'document' => $document,
-                        'seoKey' => $documentSeoKey,
-                    ]
-                );
-            }
-
-            throw $e;
+        if (!$this->allowHttps && $context->getScheme() != self::SCHEME_HTTP) {
+            throw new ResourceNotFoundException('Non-http urls are not processed');
         }
+
+        // Add trailing slash.
+        $url = preg_replace('/^([a-zA-Z0-9\-\/]+[^\/])$/', '$1/', $url);
+        $result = $this->getDocumentByUrl($url);
+
+        if ($result !== null) {
+            /** @var SeoAwareTrait $document */
+            list($documentName, $document) = $result;
+            list($documentSeoKey, $documentLink) = $this->getLink($document, $url);
+
+            // Url doesn't exist.
+            $urls = $document->getUrls();
+            if (empty($urls) && $documentLink === false) {
+                throw new ResourceNotFoundException();
+            }
+
+            if (is_array($document->getExpiredUrls())
+                && in_array($this->getUrlHash($url), $document->getExpiredUrls())
+            ) {
+                if ($documentSeoKey === false) {
+                    return $this->doRedirect(
+                        $this->ensurePrefixSlash($documentLink),
+                        $this->getTypeMap()[$documentName]['_route'],
+                        (!$this->allowHttps) ? self::SCHEME_HTTP : null
+                    );
+                }
+            }
+
+            // Force redirect to original link, if links are not identical (lowercase, trailing slash).
+            if ($requestedUrlOriginal !== $documentLink) {
+                return $this->doRedirect($documentLink, $this->getTypeMap()[$documentName]['_route']);
+            }
+
+            return array_merge(
+                $this->getTypeMap()[$documentName],
+                [
+                    'document' => $document,
+                    'seoKey' => $documentSeoKey,
+                ]
+            );
+        }
+
+        throw new ResourceNotFoundException();
     }
 
     /**
