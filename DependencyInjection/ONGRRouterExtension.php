@@ -61,9 +61,12 @@ class ONGRRouterExtension extends Extension
     private function normalizeManagerServiceId(ContainerBuilder $container, $id)
     {
         if (!($container->hasDefinition($id) || $container->has($id))) {
-            @trigger_error("Please define full elasticsearch manager id for ongr_router, f.e. es.manager.default."
-                . " Short definition is now deprecated!", E_USER_DEPRECATED);
-            $id =  sprintf('es.manager.%s', $id);
+            @trigger_error(
+                'Please define full elasticsearch manager id for ongr_router, f.e. es.manager.default.'
+                . ' Short definition is now deprecated!',
+                E_USER_DEPRECATED
+            );
+            $id = sprintf('es.manager.%s', $id);
         }
 
         return $id;
