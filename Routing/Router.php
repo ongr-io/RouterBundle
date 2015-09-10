@@ -31,6 +31,11 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
     private $seoGenerator = null;
 
     /**
+     * @var Manager
+     */
+    private $manager;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(
@@ -52,7 +57,7 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
 
         $seoUrlMatcher = new SeoUrlMatcher(
             parent::getMatcher(),
-            $this->getESManager(),
+            $this->getManager(),
             $this->getContainer()->getParameter('ongr_router.seo_route'),
             $isAjax,
             $this->getContainer()->getParameter('ongr_router.seo_key')
@@ -115,11 +120,17 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
      *
      * @return Manager
      */
-    private function getESManager()
+    private function getManager()
     {
-        return $this
-            ->getContainer()
-            ->get($this->getContainer()->getParameter('ongr_router.manager'));
+        return $this->manager;
+    }
+
+    /**
+     * @param Manager $manager
+     */
+    public function setManager(Manager $manager)
+    {
+        $this->manager = $manager;
     }
 
     /**

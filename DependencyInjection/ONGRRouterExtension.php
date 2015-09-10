@@ -14,6 +14,7 @@ namespace ONGR\RouterBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -36,10 +37,12 @@ class ONGRRouterExtension extends Extension
         $loader->load('services.yml');
         $loader->load('router.yml');
 
-        $container->setParameter(
-            'ongr_router.manager',
-            $this->normalizeManagerServiceId($container, $config['es_manager'])
-        );
+        $container
+            ->getDefinition('ongr_router.router')
+            ->addMethodCall(
+                'setManager',
+                [new Reference($this->normalizeManagerServiceId($container, $config['es_manager']))]
+            );
         $container->setParameter('ongr_router.seo_key', $config['seo_key']);
         $container->setParameter('ongr_router.seo_route', $config['seo_routes']);
         $container->setParameter('ongr_router.enable', $config['enable']);
