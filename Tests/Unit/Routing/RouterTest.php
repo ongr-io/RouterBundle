@@ -33,10 +33,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $container = $container ? $container : new ContainerBuilder();
 
         $customModel = new \stdClass();
-        $container->set('es.manager', $customModel);
+        $container->set('es.manager.default', $customModel);
         $container->setParameter('ongr_router.seo_route', []);
         $container->setParameter('ongr_router.seo_key', null);
-        $container->setParameter('ongr_router.manager', 'default');
+        $container->setParameter('ongr_router.manager', 'es.manager.default');
 
         $seoMapper = $this->getMock('ONGR\RouterBundle\Service\SeoUrlMapper');
         $container->set('ongr_router.seo_url_mapper', $seoMapper);
