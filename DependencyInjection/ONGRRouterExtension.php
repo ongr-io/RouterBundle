@@ -36,11 +36,33 @@ class ONGRRouterExtension extends Extension
         $loader->load('services.yml');
         $loader->load('router.yml');
 
-        $container->setParameter('ongr_router.manager', $config['es_manager']);
+        $container->setParameter(
+            'ongr_router.manager',
+            $this->normalizeManagerServiceId($container, $config['es_manager'])
+        );
         $container->setParameter('ongr_router.seo_key', $config['seo_key']);
         $container->setParameter('ongr_router.seo_route', $config['seo_routes']);
         $container->setParameter('ongr_router.enable', $config['enable']);
         $container->setParameter('ongr_router.add_symfony_router', $config['add_symfony_router']);
         $container->setParameter('ongr_router.add_ongr_router', $config['add_ongr_router']);
+    }
+
+    /**
+     * Normalizes service id if it's in short format.
+     *
+     * @param ContainerBuilder $container
+     * @param string           $id
+     *
+     * @return string
+     */
+    private function normalizeManagerServiceId(ContainerBuilder $container, $id)
+    {
+        if (!($container->hasDefinition($id) || $container->has($id))) {
+            @trigger_error("Please define full elasticsearch manager id for ongr_router, f.e. es.manager.default."
+                . " Short definition is now deprecated!", E_USER_DEPRECATED);
+            $id =  sprintf('es.manager.%s', $id);
+        }
+
+        return $id;
     }
 }

@@ -23,12 +23,12 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
     /**
      * @var ContainerInterface
      */
-    protected $container;
+    private $container;
 
     /**
      * @var SeoUrlGenerator|null
      */
-    protected $seoGenerator = null;
+    private $seoGenerator = null;
 
     /**
      * {@inheritdoc}
@@ -53,11 +53,11 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
         $seoUrlMatcher = new SeoUrlMatcher(
             parent::getMatcher(),
             $this->getESManager(),
-            $this->container->getParameter('ongr_router.seo_route'),
+            $this->getContainer()->getParameter('ongr_router.seo_route'),
             $isAjax,
-            $this->container->getParameter('ongr_router.seo_key')
+            $this->getContainer()->getParameter('ongr_router.seo_key')
         );
-        $seoUrlMatcher->setSeoUrlMapper($this->container->get('ongr_router.seo_url_mapper'));
+        $seoUrlMatcher->setSeoUrlMapper($this->getContainer()->get('ongr_router.seo_url_mapper'));
 
         return $seoUrlMatcher;
     }
@@ -71,7 +71,7 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
             return $this->seoGenerator;
         }
 
-        $typeMap = $this->container->getParameter('ongr_router.seo_route');
+        $typeMap = $this->getContainer()->getParameter('ongr_router.seo_route');
         $parentGenerator = parent::getGenerator();
         $path = null;
         $request = $this->getRequest();
@@ -103,8 +103,8 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
      */
     private function getRequest()
     {
-        if ($this->container->isScopeActive('request')) {
-            return $this->container->get('request');
+        if ($this->getContainer()->isScopeActive('request')) {
+            return $this->getContainer()->get('request');
         }
 
         return false;
@@ -117,10 +117,16 @@ class Router extends BaseRouter implements VersatileParameterGeneratorInterface
      */
     private function getESManager()
     {
-        $managerName = $this->container->getParameter('ongr_router.manager');
-
         return $this
-            ->container
-            ->get($managerName === 'default' ? 'es.manager' : sprintf('es.manager.%s', $managerName));
+            ->getContainer()
+            ->get($this->getContainer()->getParameter('ongr_router.manager'));
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return $this->container;
     }
 }
