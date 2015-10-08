@@ -1,3 +1,4 @@
+sudo: false 
 language: php
 php:
     - 5.4
@@ -6,7 +7,8 @@ php:
 services:
     - elasticsearch
 install:
-    - sudo pip install -q sphinx --use-mirrors
+    - pip install --upgrade pip --user `whoami`
+    - pip install -q sphinx --user `whoami`
     - wget -q -O conf.py https://raw.githubusercontent.com/ongr-io/docs-aggregator/master/source/conf-travis.py
 before_script:
     - echo "USE mysql;\nUPDATE user SET password=PASSWORD('root') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
