@@ -28,7 +28,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         // Case #0 test default values.
         $out[] = [
             [],
-            'default',
+            'es.manager.default',
             [],
         ];
 
