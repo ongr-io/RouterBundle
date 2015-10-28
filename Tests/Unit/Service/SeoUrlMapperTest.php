@@ -24,7 +24,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * Test cases provider for testGetLinkByKey().
      *
-     * @return Array of test cases.
+     * @return Array Of test cases.
      */
     public function getTestGetLinkByKeyCases()
     {
@@ -76,7 +76,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * Test cases provider for testCheckDocumentUrlExists().
      *
-     * @return Array of test cases.
+     * @return Array Of test cases.
      */
     public function getTestCheckDocumentUrlExistsCases()
     {
@@ -162,7 +162,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
     /**
      * Fake document without urls.
      *
-     * @return Product $document
+     * @return Product
      */
     private function getEmptyProductDocument()
     {
