@@ -23,14 +23,14 @@ class UrlNested
     /**
      * @var string URL.
      *
-     * @ES\Property(name="url", type="string", analyzer="urlAnalyzer")
+     * @ES\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
      */
     protected $url;
 
     /**
      * @var string Key.
      *
-     * @ES\Property(name="key", type="string", index="not_analyzed")
+     * @ES\Property(name="key", type="string", options={"index"="not_analyzed"})
      */
     protected $key;
 

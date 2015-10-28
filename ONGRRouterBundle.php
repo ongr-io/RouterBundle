@@ -30,7 +30,6 @@ class ONGRRouterBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new SetRouterPass());
-        $container->addCompilerPass(new SeoAnalyzerAwarePass());
         $container->addCompilerPass(new RegisterRoutersPass('ongr_router.chain_router'));
     }
 }

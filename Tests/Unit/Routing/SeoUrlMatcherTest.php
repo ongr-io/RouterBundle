@@ -11,9 +11,8 @@
 
 namespace ONGR\RouterBundle\Tests\Unit\Routing;
 
-use ONGR\ElasticsearchBundle\Mapping\ClassMetadata;
-use ONGR\ElasticsearchBundle\ORM\Manager;
-use ONGR\RouterBundle\Document\UrlObject;
+use ONGR\ElasticsearchBundle\Service\Manager;
+use ONGR\RouterBundle\Document\UrlNested;
 use ONGR\RouterBundle\Routing\SeoUrlMatcher;
 use ONGR\RouterBundle\Service\SeoUrlMapper;
 use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document\Product;
@@ -30,7 +29,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $object = new Product();
         $testDocument = 'product';
 
-        $url1 = new UrlObject();
+        $url1 = new UrlNested();
         $url1->setUrl('test/');
         $url1->setKey('test_key');
 
@@ -40,7 +39,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $expiredUrlObject = new Product();
         $expiredUrlObject->setExpiredUrls([md5('test/')]);
 
-        $url2 = new UrlObject();
+        $url2 = new UrlNested();
         $url2->setUrl('test2/');
         $expiredUrlObject->setUrls(new \ArrayIterator([$url2]));
 
@@ -169,23 +168,24 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $manager = $this
             ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
             ->disableOriginalConstructor()
-            ->setMethods(['getRepository', 'getDocumentMapping'])
+            ->setMethods(['getRepository', 'getMetadataCollector'])
             ->getMock();
 
-        /** @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $mapping */
-        $mapping = $this->getMockBuilder('ONGR\ElasticsearchBundle\Mapping\ClassMetadata')
+
+        /** @var array|\PHPUnit_Framework_MockObject_MockObject $mapping */
+        $mapping = $this->getMockBuilder('ONGR\ElasticsearchBundle\Mapping\MetadataCollector')
             ->disableOriginalConstructor()
-            ->setMethods(['getType'])
+            ->setMethods(['getDocumentMapping'])
             ->getMock();
 
-        reset($map);
-        $mapping->expects($this->any())
-            ->method('getType')
-            ->willReturn(key($map));
+        $documentMap = ['type' => 'product'];
 
-        $manager
-            ->expects($this->any())
+        $mapping->expects($this->any())
             ->method('getDocumentMapping')
+            ->willReturn($documentMap);
+
+        $manager->expects($this->any())
+            ->method('getMetadataCollector')
             ->willReturn($mapping);
 
         $repository
@@ -242,7 +242,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Case #0.
-        $url1 = new UrlObject();
+        $url1 = new UrlNested();
         $url1->setUrl('seo1/');
         $url1->setKey('url1');
         $document1 = new Product();
@@ -251,7 +251,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $out[] = ['seo2/', $map, [$document1], 'testModelTestRoute', '/seo1/'];
 
         // Case #1 (not all urls expired).
-        $url2 = new UrlObject();
+        $url2 = new UrlNested();
         $url2->setUrl('seo1/');
         $url2->setKey('url1');
         $document2 = new Product();
@@ -260,7 +260,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $out[] = ['seo2/', $map, [$document2], 'testModelTestRoute', '/seo1/'];
 
         // Case #2 - lowercase existing seo url.
-        $url3 = new UrlObject();
+        $url3 = new UrlNested();
         $url3->setUrl('Seo1/');
         $url3->setKey('url1');
         $document3 = new Product();
@@ -269,7 +269,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $out[] = ['seo1/', $map, [$document3], 'testModelTestRoute', '/Seo1/'];
 
         // Case #3 - trailing slash missing on existing url.
-        $url4 = new UrlObject();
+        $url4 = new UrlNested();
         $url4->setUrl('Seo1/');
         $url4->setKey('url1');
         $document4 = new Product();
@@ -278,10 +278,10 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $out[] = ['seo1', $map, [$document4], 'testModelTestRoute', '/Seo1/'];
 
         // Case #4 - redirect to original url, which is not necessarily the first one.
-        $url51 = new UrlObject();
+        $url51 = new UrlNested();
         $url51->setUrl('Seo1/');
         $url51->setKey('url1');
-        $url52 = new UrlObject();
+        $url52 = new UrlNested();
         $url52->setUrl('Seo2/');
         $url52->setKey('url2');
 
@@ -372,23 +372,25 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $manager = $this
             ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
             ->disableOriginalConstructor()
-            ->setMethods(['getRepository', 'getDocumentMapping'])
+            ->setMethods(['getRepository', 'getMetadataCollector'])
             ->getMock();
 
-        /** @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject $mapping */
-        $mapping = $this->getMockBuilder('ONGR\ElasticsearchBundle\Mapping\ClassMetadata')
+
+        /** @var array|\PHPUnit_Framework_MockObject_MockObject $mapping */
+        $mapping = $this->getMockBuilder('ONGR\ElasticsearchBundle\Mapping\MetadataCollector')
             ->disableOriginalConstructor()
-            ->setMethods(['getType'])
+            ->setMethods(['getDocumentMapping'])
             ->getMock();
 
-        reset($map);
+        $documentMap = ['type' => 'product'];
+
         $mapping->expects($this->any())
-            ->method('getType')
-            ->willReturn(key($map));
+            ->method('getDocumentMapping')
+            ->willReturn($documentMap);
 
         $manager
             ->expects($this->any())
-            ->method('getDocumentMapping')
+            ->method('getMetadataCollector')
             ->willReturn($mapping);
 
         $manager
@@ -428,7 +430,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         // Case 2 - document not found.
         $document = null;
-        $out[] = ['seo2/', $map, [$document], 'testModelTestRoute', false];
+        $out[] = ['seo2/', $map, [], 'testModelTestRoute', false];
 
         return $out;
     }
