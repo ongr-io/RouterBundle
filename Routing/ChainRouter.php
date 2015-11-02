@@ -95,7 +95,7 @@ class ChainRouter extends CmfChainRouter
         }
 
         foreach ($parameters as $parameter) {
-            if (!is_scalar($parameter) && !($router instanceof VersatileParameterGeneratorInterface)) {
+            if (!is_null($parameter) && !is_scalar($parameter) && !($router instanceof VersatileParameterGeneratorInterface)) {
                 return false;
             }
         }
