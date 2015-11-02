@@ -24,14 +24,14 @@ class UrlObject
     /**
      * @var string URL.
      *
-     * @ES\Property(name="url", type="string", analyzer="urlAnalyzer")
+     * @ES\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
      */
     protected $url;
 
     /**
      * @var string Key.
      *
-     * @ES\Property(name="key", type="string", index="no")
+     * @ES\Property(name="key", type="string", options={"index"="not_analysed"})
      */
     protected $key;
 
