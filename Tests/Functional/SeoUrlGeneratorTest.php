@@ -11,7 +11,7 @@
 
 namespace ONGR\RouterBundle\Tests\Functional;
 
-use ONGR\ElasticsearchBundle\DSL\Filter\IdsFilter;
+use ONGR\ElasticsearchDSL\Filter\IdsFilter;
 use ONGR\ElasticsearchBundle\Test\AbstractElasticsearchTestCase;
 use ONGR\RouterBundle\Routing\ChainRouter;
 
@@ -102,11 +102,7 @@ class SeoUrlGeneratorTest extends AbstractElasticsearchTestCase
             ->getManager()
             ->getRepository('AcmeTestBundle:Product');
 
-        $search = $repository
-            ->createSearch()
-            ->addFilter(new IdsFilter([$documentId]));
-
-        $parameters['document'] = $repository->execute($search)->current();
+        $parameters['document'] = $repository->find($documentId);
 
         /** @var \ONGR\RouterBundle\Routing\Router $router */
         $router = $this->getContainer()->get('router');
@@ -191,6 +187,7 @@ class SeoUrlGeneratorTest extends AbstractElasticsearchTestCase
      */
     public function testUrlMatch($requestUrl, $expectedUrl, $isRedirect, $expectedResponse, $environment = 'test')
     {
+        $this->getManager();
         $client = self::createClient(['environment' => $environment]);
         $client->request('GET', $requestUrl);
 
@@ -213,6 +210,7 @@ class SeoUrlGeneratorTest extends AbstractElasticsearchTestCase
      */
     public function testChainGenerator()
     {
+        $this->getManager();
         /** @var ChainRouter $router */
         $router = $this->getContainer()->get('router');
 

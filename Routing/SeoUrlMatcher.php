@@ -11,12 +11,12 @@
 
 namespace ONGR\RouterBundle\Routing;
 
-use ONGR\ElasticsearchBundle\DSL\Bool\Bool;
-use ONGR\ElasticsearchBundle\DSL\Query\MatchQuery;
-use ONGR\ElasticsearchBundle\DSL\Query\NestedQuery;
-use ONGR\ElasticsearchBundle\DSL\Query\TermQuery;
-use ONGR\ElasticsearchBundle\DSL\Search;
-use ONGR\ElasticsearchBundle\ORM\Manager;
+use ONGR\ElasticsearchDSL\Query\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\MatchQuery;
+use ONGR\ElasticsearchDSL\Query\NestedQuery;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
+use ONGR\ElasticsearchDSL\Search;
+use ONGR\ElasticsearchBundle\Service\Manager;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
 use ONGR\RouterBundle\Service\SeoUrlMapper;
 use Symfony\Bundle\FrameworkBundle\Routing\RedirectableUrlMatcher;
@@ -206,15 +206,15 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
             return $search;
         }
 
-        $bool = new Bool();
-        $bool->addToBool(new MatchQuery('urls.url', $url));
+        $bool = new BoolQuery();
+        $bool->add(new MatchQuery('urls.url', $url), BoolQuery::SHOULD);
 
         if ($this->urlKey != null) {
-            $bool->addToBool(new TermQuery('urls.key', $this->urlKey));
+            $bool->add(new TermQuery('urls.key', $this->urlKey), BoolQuery::SHOULD);
         }
 
-        $search->addQuery(new NestedQuery('urls', $bool), 'should');
-        $search->addQuery(new TermQuery('expired_urls', $this->getUrlHash($url)), 'should');
+        $search->addQuery(new NestedQuery('urls', $bool), BoolQuery::SHOULD);
+        $search->addQuery(new TermQuery('expired_urls', $this->getUrlHash($url)), BoolQuery::SHOULD);
 
         return $search;
     }
@@ -234,8 +234,8 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
         /** @var SeoAwareTrait $document */
         foreach ($repository->execute($this->getSearch($url)) as $document) {
-            $mapping = $this->getEsManager()->getDocumentMapping($document);
-            $type = $mapping->getType();
+            $mapping = $this->getEsManager()->getMetadataCollector()->getDocumentMapping($document);
+            $type = $mapping['type'];
 
             if ($document && isset($this->getTypeMap()[$type])) {
                 $out = [$type, $document];

@@ -11,7 +11,7 @@
 
 namespace ONGR\RouterBundle\Routing;
 
-use ONGR\ElasticsearchBundle\ORM\Manager;
+use ONGR\ElasticsearchBundle\Service\Manager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router as BaseRouter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
