@@ -176,6 +176,20 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
             'expectedUrl' => 'url',
         ];
 
+        // Case #8. Null value as a parameter.
+        $chainRouter = new ChainRouter();
+        /** @var RouterInterface|\PHPUnit_Framework_MockObject_MockObject $router */
+        $router = $this->getMockForAbstractClass('Symfony\Component\Routing\RouterInterface');
+        $router->expects($this->once())->method('generate')->willReturn('expected-url');
+        $chainRouter->add($router);
+        $cases[] = [
+            'router' => $chainRouter,
+            'route' => 'route',
+            'parameters' => [null],
+            'absolute' => false,
+            'expectedUrl' => 'expected-url',
+        ];
+
         return $cases;
     }
 
