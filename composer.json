@@ -13,14 +13,14 @@
     ],
     "require": {
         "php": ">=5.5",
-        "symfony/symfony": "~2.3",
+        "symfony/symfony": "~2.7",
         "symfony-cmf/routing": "~1.3",
         "ongr/elasticsearch-bundle": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4",
         "symfony/monolog-bundle": "~2.3",
-        "ongr/ongr-strict-standard": "~2.1",
+        "squizlabs/php_codesniffer": "~2.0",
         "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
