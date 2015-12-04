@@ -159,14 +159,14 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         // Elasticsearch setup.
         $repository = $this
-            ->getMockBuilder('ElasticsearchBundle\ORM\Repository')
+            ->getMockBuilder('ElasticsearchBundle\Service\Repository')
             ->disableOriginalConstructor()
             ->setMethods(['execute'])
             ->getMock();
 
         /** @var Manager|\PHPUnit_Framework_MockObject_MockObject $manager */
         $manager = $this
-            ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
+            ->getMockBuilder('ElasticsearchBundle\Service\Manager')
             ->disableOriginalConstructor()
             ->setMethods(['getRepository', 'getMetadataCollector'])
             ->getMock();
@@ -358,7 +358,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         // Elasticsearch setup.
         $repository = $this
-            ->getMockBuilder('ElasticsearchBundle\ORM\Repository')
+            ->getMockBuilder('ElasticsearchBundle\Service\Repository')
             ->disableOriginalConstructor()
             ->setMethods(['execute'])
             ->getMock();
@@ -370,7 +370,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         /** @var Manager|\PHPUnit_Framework_MockObject_MockObject $manager */
         $manager = $this
-            ->getMockBuilder('ElasticsearchBundle\ORM\Manager')
+            ->getMockBuilder('ElasticsearchBundle\Service\Manager')
             ->disableOriginalConstructor()
             ->setMethods(['getRepository', 'getMetadataCollector'])
             ->getMock();
