@@ -185,4 +185,4 @@ Just visit `/music/acoustic-guitar` page and you should see a title of the produ
 ## License
 
 This bundle is under the MIT license. Please, see the complete license
-in the bundle [`LICENSE`](LICENSE)` file.
+in the bundle [`LICENSE`](LICENSE) file.
