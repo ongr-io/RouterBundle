@@ -1,17 +1,17 @@
 # ONGR Router Bundle
 
-Router Bundle allow to define URLs for elasticsearch documents.
-At url matching phrase it additional searches for elasticsearch documents with specified url.
+Router Bundle allows to define an match URLs for elasticsearch documents.
+At url matching phase it additionaly searches for elasticsearch documents with specified url.
 
-This can be used for generating nice URLs for products, categories or any other document.
-Beautiful URLs helps SEO and improves user's usability experience.
+This can be used for generating/matching nice URLs for any document.
+Beautiful URLs help SEO and improve user's usability experience.
 
 
 ## Documentation
 
 The online documentation of the bundle is [here](Resources/doc/index.md)
 
-For contribution to the documentation you can find it in the [contribute](Resources/doc/contribute.md) topic.
+For contribution rules take a look at [contribute](Resources/doc/contribute.md) topic.
 
 
 ## Setup the bundle
@@ -24,13 +24,9 @@ For contribution to the documentation you can find it in the [contribute](Resour
 Router bundle is installed using [Composer](https://getcomposer.org).
 
 ```bash
-php composer.phar require ongr/router-bundle "~1.0"
+composer require ongr/router-bundle "~1.0"
 
 ```
-
-> WARNING: "~1.0" stable is not released yet, we are in the final steps to finish everything and hope can release it soon.
-
-> "~1.0" indicates a version, chose any version that fits for you.
 
 Enable Router and Elasticsearch bundles in your AppKernel:
 
@@ -43,7 +39,7 @@ public function registerBundles()
     $bundles = array(
         // ...
         new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
-     	new ONGR\RouterBundle\ONGRRouterBundle(),
+    	new ONGR\RouterBundle\ONGRRouterBundle(),
     );
 }
 
@@ -94,8 +90,8 @@ ongr_router:
 At `_controller` you define controller and action for every document type.
 `_route` is a name of this route and it can be used at path generation.
 
-`urlAnalyzer` at `ongr_elasticsearch` configuration defines how all url fields are analyzed by elasticsearch.
-Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/ElasticsearchBundle/blob/readme/mapping.md) for more information about the configuration.
+`urlAnalyzer` at `ongr_elasticsearch` configuration defines how all url fields are analyzed by Elasticsearch.
+Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/mapping.md) for more information about the configuration.
 
 
 #### Step 3: Create a Product document
@@ -139,7 +135,7 @@ class Product extends AbstractDocument
 
 ```
 
-In order to have fancy URLs, the Document has to use `SeoAwareTrait`.
+In order to have friendly URLs, the Document has to use `SeoAwareTrait`.
 
 
 #### Step 4: Create an action for product page
@@ -173,7 +169,7 @@ Create an elasticsearch index by running this command in your terminal:
 
 ```
 
-> More info about all commands can be found in the [Elasticsearch bundle commands chapter](https://github.com/ongr-io/ElasticsearchBundle/blob/readme/commands.md).
+> More info about all commands can be found in the [Elasticsearch bundle commands chapter](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/commands.md).
 
 Also, run the following curl command in your terminal to insert a product for this demonstration.
 
@@ -184,9 +180,9 @@ Also, run the following curl command in your terminal to insert a product for th
 
 #### Step 6: Check if it works
 
-Just visit `/music/acoustic-guitar` page and you should see a title of the product that you inserted in **step 5**. :guitar:
+Just visit `/music/acoustic-guitar` page and you should see a title of the product that you inserted in **step 5**.
 
 ## License
 
 This bundle is under the MIT license. Please, see the complete license
-in the bundle ``LICENSE`` file.
+in the bundle [`LICENSE`](LICENSE)` file.
