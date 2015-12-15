@@ -1,6 +1,6 @@
 # ONGR Router Bundle
 
-Router Bundle allows to define an match URLs for elasticsearch documents.
+Router Bundle allows to define and match URLs for elasticsearch documents.
 At url matching phase it additionaly searches for elasticsearch documents with specified url.
 
 This can be used for generating/matching nice URLs for any document.
