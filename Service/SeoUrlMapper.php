@@ -30,12 +30,10 @@ class SeoUrlMapper
     public function getLinkByKey($document, $key)
     {
         $urls = $document->getUrls();
-        if (!empty($urls)) {
-            /** @var UrlObject $url */
-            foreach ($urls as $url) {
-                if ($url->getKey() === $key) {
-                    return $url->getUrl();
-                }
+        /** @var UrlObject $url */
+        foreach ($urls as $url) {
+            if ($url->getKey() === $key) {
+                return $url->getUrl();
             }
         }
 
@@ -53,7 +51,7 @@ class SeoUrlMapper
     public function checkDocumentUrlExists($document, $requestedUrl)
     {
         $urls = $document->getUrls();
-        if (!empty($urls)) {
+        if (count($urls)) {
             $requestedUrlLowercased = mb_strtolower($requestedUrl, 'UTF-8');
 
             /** @var UrlObject $url */

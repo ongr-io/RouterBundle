@@ -111,7 +111,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
             // Url doesn't exist.
             $urls = $document->getUrls();
-            if (empty($urls) && $documentLink === false) {
+            if (count($urls) === 0 && $documentLink === false) {
                 throw new ResourceNotFoundException();
             }
 
