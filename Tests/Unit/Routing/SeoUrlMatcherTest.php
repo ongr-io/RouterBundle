@@ -27,7 +27,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
     public function getTestMatchData()
     {
         $url1 = new UrlNested();
-        $url1->setUrl('foo/');
+        $url1->setUrl('foo');
         $url1->setKey('foo_key');
 
         $product = new Product();
@@ -38,50 +38,50 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         $productWithExpiredUrl->setExpiredUrls([md5('test')]);
 
         $url2 = new UrlNested();
-        $url2->setUrl('bar/');
+        $url2->setUrl('bar');
         $productWithExpiredUrl->setUrls(new \ArrayIterator([$url2]));
 
         $out = [];
 
         // Case #0: Empty map = not found
-        $out[] = ['foo/', 'foo/', null, [$product, $productWithExpiredUrl], []];
+        $out[] = ['foo', 'foo', null, [$product, $productWithExpiredUrl], []];
 
         // Case #1: Documents does not exist = not found
-        $out[] = ['foo/', 'foo/', null, []];
+        $out[] = ['foo', 'foo', null, []];
 
         // Case #2: Product found
         $out[] = [
-            'foo/',
-            'foo/',
+            'foo',
+            'foo',
             array_merge($this->getDefaultResult(), ['seoKey' => 'foo_key']),
             [$product]
         ];
 
         // Case #3: Product without seoKey found
         $out[] = [
-            'bar/',
-            'bar/',
+            'bar',
+            'bar',
             array_merge($this->getDefaultResult(), ['seoKey' => null]),
             [$productWithExpiredUrl]
         ];
 
         // Case #4: Multiple products found
         $out[] = [
-            'foo/',
-            'foo/',
+            'foo',
+            'foo',
             array_merge($this->getDefaultResult(), ['seoKey' => 'foo_key']),
             [$product, $productWithExpiredUrl]
         ];
 
         // Case #5: slash trimming
         $customUrl = new UrlNested();
-        $customUrl->setUrl('longer/foo/url/');
+        $customUrl->setUrl('longer/foo/url');
         $customProduct = clone $product;
         $customProduct->setUrls(new \ArrayIterator([$customUrl]));
 
         $out[] = [
-            '/longer/foo/url/',
-            'longer/foo/url/',
+            '/longer/foo/url',
+            'longer/foo/url',
             array_merge($this->getDefaultResult(), ['seoKey' => null]),
             [$customProduct]
         ];
@@ -89,9 +89,9 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
         // Case #6: expired url = not found
         $document5 = new Product();
         $document5->setUrls(new \ArrayIterator());
-        $document5->setExpiredUrls([md5(strtolower('seo2/')), md5(strtolower('seo1/'))]);
+        $document5->setExpiredUrls([md5(strtolower('seo2')), md5(strtolower('seo1'))]);
 
-        $out[] = ['seo2/', 'seo2/', null, [$document5]];
+        $out[] = ['seo2', 'seo2', null, [$document5]];
 
         return $out;
     }
@@ -143,43 +143,34 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         // Case #0: Url is expired.
         $url1 = new UrlNested();
-        $url1->setUrl('seo1/');
+        $url1->setUrl('seo1');
         $url1->setKey('url1');
         $document1 = new Product();
         $document1->setUrls(new \ArrayIterator([$url1]));
-        $document1->setExpiredUrls([md5(strtolower('seo2/'))]);
-        $out[] = ['seo2/', 'seo2/', '/seo1/', [$document1]];
+        $document1->setExpiredUrls([md5(strtolower('seo2'))]);
+        $out[] = ['seo2', 'seo2', '/seo1', [$document1]];
 
         // Case #1: Not all urls are expired.
         $url2 = new UrlNested();
-        $url2->setUrl('seo1/');
+        $url2->setUrl('seo1');
         $url2->setKey('url1');
         $document2 = new Product();
         $document2->setUrls(new \ArrayIterator([$url2]));
-        $document2->setExpiredUrls([md5(strtolower('seo2/')), md5(strtolower('seo1/'))]);
-        $out[] = ['seo2/', 'seo2/', '/seo1/', [$document2]];
+        $document2->setExpiredUrls([md5(strtolower('seo2')), md5(strtolower('seo1'))]);
+        $out[] = ['seo2', 'seo2', '/seo1', [$document2]];
 
-        // Case #2: Trailing slash missing on existing url.
-        $url4 = new UrlNested();
-        $url4->setUrl('seo1/');
-        $url4->setKey('url1');
-        $document4 = new Product();
-        $document4->setUrls(new \ArrayIterator([$url4]));
-        $document4->setExpiredUrls([]);
-        $out[] = ['seo1', 'seo1/', '/seo1/', [$document4]];
-
-        // Case #3: Redirect to original url, which is not necessarily the first one.
+        // Case #2: Redirect to original url, which is not necessarily the first one.
         $url51 = new UrlNested();
-        $url51->setUrl('Seo1/');
+        $url51->setUrl('Seo1');
         $url51->setKey('url1');
         $url52 = new UrlNested();
-        $url52->setUrl('Seo2/');
+        $url52->setUrl('Seo2');
         $url52->setKey('url2');
 
         $document5 = new Product();
         $document5->setUrls(new \ArrayIterator([$url51, $url52]));
         $document5->setExpiredUrls([]);
-        $out[] = ['seo2/', 'seo2/', '/Seo2/', [$document5]];
+        $out[] = ['seo2', 'seo2', '/Seo2', [$document5]];
 
         return $out;
     }
@@ -239,7 +230,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         $matcher = new SeoUrlMatcher($parentMatcher, $manager, [], false);
         $matcher->setSeoUrlMapper(new SeoUrlMapper());
-        $matcher->match('seo1/');
+        $matcher->match('seo1');
     }
 
     /**
