@@ -100,8 +100,6 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
             throw new ResourceNotFoundException('Non-http urls are not processed');
         }
 
-        // Add trailing slash.
-        $url = preg_replace('/^([a-zA-Z0-9\-\/]+[^\/])$/', '$1/', $url);
         $result = $this->getDocumentByUrl($url);
 
         if ($result !== null) {
@@ -111,7 +109,7 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
 
             // Url doesn't exist.
             $urls = $document->getUrls();
-            if (empty($urls) && $documentLink === false) {
+            if (count($urls) === 0 && $documentLink === false) {
                 throw new ResourceNotFoundException();
             }
 
