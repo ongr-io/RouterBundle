@@ -29,7 +29,6 @@ class ONGRRouterBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new SetRouterPass());
-        $container->addCompilerPass(new RegisterRoutersPass('ongr_router.chain_router'));
+        $container->addCompilerPass(new RegisterRoutersPass('ongr_router'));
     }
 }
