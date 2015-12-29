@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.5",
-        "symfony/symfony": "~2.7",
+        "symfony/symfony": "~2.7|~3.0",
         "symfony-cmf/routing": "~1.3",
         "ongr/elasticsearch-bundle": "dev-master",
         "ongr/elasticsearch-dsl": "~1.0"
