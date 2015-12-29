@@ -19,20 +19,9 @@ use ONGR\ElasticsearchBundle\Annotation as ES;
 trait SeoAwareTrait
 {
     /**
-     * Structure that represents possible URLs for the model.
+     * @var string URL.
      *
-     * Eg.:
-     *
-     * <code>
-     * array(
-     *     array('url' => 'foo/'),
-     *     array('url' => 'bar/', 'key' => 'bar_url'),
-     * )
-     * </code>
-     *
-     * @var UrlNested[]|\Iterator
-     *
-     * @ES\Property(name="urls", type="nested", objectName="ONGRRouterBundle:UrlNested", multiple=true)
+     * @ES\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
      */
-    public $urls = [];
+    public $url;
 }
