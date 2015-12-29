@@ -25,44 +25,12 @@ class UrlNested
      *
      * @ES\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
      */
-    protected $url;
+    public $url;
 
     /**
      * @var string Key.
      *
      * @ES\Property(name="key", type="string", options={"index"="not_analyzed"})
      */
-    protected $key;
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * @param string $key
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-    }
+    public $key;
 }

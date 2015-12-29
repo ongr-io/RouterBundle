@@ -12,7 +12,7 @@
 namespace ONGR\RouterBundle\Service;
 
 use ONGR\RouterBundle\Document\SeoAwareTrait;
-use ONGR\RouterBundle\Document\UrlObject;
+use ONGR\RouterBundle\Document\UrlNested;
 
 /**
  * Searches URLs in document object.
@@ -29,11 +29,11 @@ class SeoUrlMapper
      */
     public function getLinkByKey($document, $key)
     {
-        $urls = $document->getUrls();
-        /** @var UrlObject $url */
+        $urls = $document->urls;
+        /** @var UrlNested $url */
         foreach ($urls as $url) {
-            if ($url->getKey() === $key) {
-                return $url->getUrl();
+            if ($url->key === $key) {
+                return $url->url;
             }
         }
 
@@ -50,22 +50,22 @@ class SeoUrlMapper
      */
     public function checkDocumentUrlExists($document, $requestedUrl)
     {
-        $urls = $document->getUrls();
+        $urls = $document->urls;
         if (count($urls)) {
             $requestedUrlLowercased = mb_strtolower($requestedUrl, 'UTF-8');
 
-            /** @var UrlObject $url */
+            /** @var UrlNested $url */
             foreach ($urls as $url) {
-                if ($requestedUrlLowercased === mb_strtolower($url->getUrl(), 'UTF-8')) {
-                    return $url->getKey();
+                if ($requestedUrlLowercased === mb_strtolower($url->url, 'UTF-8')) {
+                    return $url->key;
                 }
             }
 
             $urls->rewind();
-            /** @var UrlObject $currentUrl */
+            /** @var UrlNested $currentUrl */
             $currentUrl = $urls->current();
 
-            return $currentUrl->getKey();
+            return $currentUrl->key;
         }
 
         return false;

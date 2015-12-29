@@ -234,13 +234,6 @@ class SeoUrlMatcher extends RedirectableUrlMatcher
         foreach ($repository->execute($this->getSearch($url)) as $document) {
             $mapping = $this->getEsManager()->getMetadataCollector()->getDocumentMapping($document);
             $type = $mapping['type'];
-
-            if ($document && isset($this->getTypeMap()[$type])) {
-                $out = [$type, $document];
-                if (!in_array($this->getUrlHash($url), $document->getExpiredUrls())) {
-                    break;
-                }
-            }
         }
 
         return empty($out) ? null : $out;

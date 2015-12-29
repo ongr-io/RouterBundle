@@ -38,8 +38,8 @@ class TestController extends Controller
     /**
      * Action that already receives document and SEO key.
      *
-     * @param DocumentInterface $document Document.
-     * @param string            $seoKey   Seo key.
+     * @param object $document Document.
+     * @param string $seoKey   Seo key.
      *
      * @return JsonResponse
      */

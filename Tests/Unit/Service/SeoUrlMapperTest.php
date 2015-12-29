@@ -12,7 +12,7 @@
 namespace ONGR\RouterBundle\Tests\Unit\Service;
 
 use ONGR\RouterBundle\Document\SeoAwareTrait;
-use ONGR\RouterBundle\Document\UrlObject;
+use ONGR\RouterBundle\Document\UrlNested;
 use ONGR\RouterBundle\Service\SeoUrlMapper;
 use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document\Product;
 
@@ -96,7 +96,7 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
         $out[] = [
             'document' => $document,
             'requestedUrl' => 'non-existing-url/',
-            'expectedUrl' => $document->getUrls()->current()->getKey(),
+            'expectedUrl' => $document->urls->current()->key,
         ];
 
         // Case #2: identical url exists.
@@ -141,20 +141,20 @@ class SeoUrlMapperTest extends \PHPUnit_Framework_TestCase
      */
     private function getProductDocument()
     {
-        $url1 = new UrlObject();
-        $url1->setUrl('seo1/');
-        $url1->setKey('url1');
+        $url1 = new UrlNested();
+        $url1->url = 'seo1/';
+        $url1->key = 'url1';
 
-        $url2 = new UrlObject();
-        $url2->setUrl('seo2/');
-        $url2->setKey('url2');
+        $url2 = new UrlNested();
+        $url2->url = 'seo2/';
+        $url2->key = 'url2';
 
-        $url3 = new UrlObject();
-        $url3->setUrl('seo3/');
-        $url3->setKey('url3');
+        $url3 = new UrlNested();
+        $url3->url = 'seo3/';
+        $url3->key = 'url3';
 
         $document = new Product();
-        $document->setUrls(new \ArrayIterator([$url1, $url2, $url3]));
+        $document->urls = new \ArrayIterator([$url1, $url2, $url3]);
 
         return $document;
     }

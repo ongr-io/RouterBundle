@@ -27,24 +27,16 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
     public function getTestMatchData()
     {
         $url1 = new UrlNested();
-        $url1->setUrl('foo');
-        $url1->setKey('foo_key');
+        $url1->url = 'foo';
+        $url1->key = 'foo_key';
 
         $product = new Product();
-        $product->setExpiredUrls([]);
-        $product->setUrls(new \ArrayIterator([$url1]));
-
-        $productWithExpiredUrl = new Product();
-        $productWithExpiredUrl->setExpiredUrls([md5('test')]);
-
-        $url2 = new UrlNested();
-        $url2->setUrl('bar');
-        $productWithExpiredUrl->setUrls(new \ArrayIterator([$url2]));
+        $product->urls = new \ArrayIterator([$url1]);
 
         $out = [];
 
         // Case #0: Empty map = not found
-        $out[] = ['foo', 'foo', null, [$product, $productWithExpiredUrl], []];
+        $out[] = ['foo', 'foo', null, [$product, []], []];
 
         // Case #1: Documents does not exist = not found
         $out[] = ['foo', 'foo', null, []];
@@ -62,7 +54,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             'bar',
             'bar',
             array_merge($this->getDefaultResult(), ['seoKey' => null]),
-            [$productWithExpiredUrl]
+            []
         ];
 
         // Case #4: Multiple products found
@@ -70,14 +62,14 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
             'foo',
             'foo',
             array_merge($this->getDefaultResult(), ['seoKey' => 'foo_key']),
-            [$product, $productWithExpiredUrl]
+            [$product, []]
         ];
 
         // Case #5: slash trimming
         $customUrl = new UrlNested();
-        $customUrl->setUrl('longer/foo/url');
+        $customUrl->url = 'longer/foo/url';
         $customProduct = clone $product;
-        $customProduct->setUrls(new \ArrayIterator([$customUrl]));
+        $customProduct->urls = new \ArrayIterator([$customUrl]);
 
         $out[] = [
             '/longer/foo/url',
@@ -88,8 +80,7 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         // Case #6: expired url = not found
         $document5 = new Product();
-        $document5->setUrls(new \ArrayIterator());
-        $document5->setExpiredUrls([md5(strtolower('seo2')), md5(strtolower('seo1'))]);
+        $document5->urls = new \ArrayIterator();
 
         $out[] = ['seo2', 'seo2', null, [$document5]];
 
@@ -143,33 +134,31 @@ class SeoUrlMatcherTest extends \PHPUnit_Framework_TestCase
 
         // Case #0: Url is expired.
         $url1 = new UrlNested();
-        $url1->setUrl('seo1');
-        $url1->setKey('url1');
+        $url1->url = 'seo1';
+        $url1->key = 'url1';
         $document1 = new Product();
-        $document1->setUrls(new \ArrayIterator([$url1]));
-        $document1->setExpiredUrls([md5(strtolower('seo2'))]);
+        $document1->urls = new \ArrayIterator([$url1]);
+
         $out[] = ['seo2', 'seo2', '/seo1', [$document1]];
 
         // Case #1: Not all urls are expired.
         $url2 = new UrlNested();
-        $url2->setUrl('seo1');
-        $url2->setKey('url1');
+        $url2->url = 'seo1';
+        $url2->key = 'url1';
         $document2 = new Product();
-        $document2->setUrls(new \ArrayIterator([$url2]));
-        $document2->setExpiredUrls([md5(strtolower('seo2')), md5(strtolower('seo1'))]);
+        $document2->urls = new \ArrayIterator([$url2]);
         $out[] = ['seo2', 'seo2', '/seo1', [$document2]];
 
         // Case #2: Redirect to original url, which is not necessarily the first one.
         $url51 = new UrlNested();
-        $url51->setUrl('Seo1');
-        $url51->setKey('url1');
+        $url51->url = 'Seo1';
+        $url51->key = 'url1';
         $url52 = new UrlNested();
-        $url52->setUrl('Seo2');
-        $url52->setKey('url2');
+        $url52->url ='Seo2';
+        $url52->key = 'url2';
 
         $document5 = new Product();
-        $document5->setUrls(new \ArrayIterator([$url51, $url52]));
-        $document5->setExpiredUrls([]);
+        $document5->urls = new \ArrayIterator([$url51, $url52]);
         $out[] = ['seo2', 'seo2', '/Seo2', [$document5]];
 
         return $out;

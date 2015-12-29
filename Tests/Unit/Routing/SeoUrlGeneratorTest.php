@@ -11,10 +11,11 @@
 
 namespace ONGR\RouterBundle\Tests\Unit\Routing;
 
-use ONGR\RouterBundle\Document\UrlObject;
+use ONGR\RouterBundle\Document\UrlNested;
 use ONGR\RouterBundle\Routing\SeoUrlGenerator;
 use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document\Product;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Validator\Constraints\Url;
 
 /**
  * Tests for url generator class.
@@ -58,10 +59,10 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         list($name, $typeMap) = $this->getDefaultTypeMap();
 
         $document = new Product();
-        $url01 = new UrlObject();
-        $url01->setUrl('test/url');
+        $url01 = new UrlNested();
+        $url01->url = 'test/url';
 
-        $document->setUrls(new \ArrayIterator([$url01]));
+        $document->urls = new \ArrayIterator([$url01]);
         $parameters = ['document' => $document];
         $expect = 'http://localhost/test/url';
         $out[] = [$typeMap, $name, $parameters, $expect];
@@ -70,10 +71,10 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         list($name, $typeMap) = $this->getDefaultTypeMap();
 
         $document = new Product();
-        $url11 = new UrlObject();
-        $url11->setUrl('test/url');
+        $url11 = new UrlNested();
+        $url11->url = 'test/url';
 
-        $document->setUrls(new \ArrayIterator([$url11]));
+        $document->urls = new \ArrayIterator([$url11]);
         $parameters = [
             'document' => $document,
             'test' => 'test',
@@ -85,10 +86,10 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         list($name, $typeMap) = $this->getDefaultTypeMap();
 
         $document = new Product();
-        $url21 = new UrlObject();
-        $url21->setUrl('test/url');
+        $url21 = new UrlNested();
+        $url21->url = 'test/url';
 
-        $document->setUrls(new \ArrayIterator([$url21]));
+        $document->urls = new \ArrayIterator([$url21]);
         $parameters = [
             'document' => $document,
             'test' => 'test',
@@ -101,12 +102,12 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         list($name, $typeMap) = $this->getDefaultTypeMap();
 
         $document = new Product();
-        $url31 = new UrlObject();
-        $url31->setUrl('test/url');
-        $url32 = new UrlObject();
-        $url32->setUrl('base/path/file.htm');
+        $url31 = new UrlNested();
+        $url31->url = 'test/url';
+        $url32 = new UrlNested();
+        $url32->url = 'base/path/file.htm';
 
-        $document->setUrls(new \ArrayIterator([$url31, $url32]));
+        $document->urls = new \ArrayIterator([$url31, $url32]);
         $parameters = [
             'document' => $document,
             'test' => 'test',
@@ -119,10 +120,10 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $typeMap = [];
 
         $document = new Product();
-        $url41 = new UrlObject();
-        $url41->setUrl('test/url');
+        $url41 = new UrlNested();
+        $url41->url = 'test/url';
 
-        $document->setUrls(new \ArrayIterator([$url41]));
+        $document->urls = new \ArrayIterator([$url41]);
         $parameters = [
             'document' => $document,
             'test' => 'test',
@@ -143,7 +144,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $document = new Product();
         $document->id = 'testid';
-        $document->setUrls([]);
+        $document->urls = [];
 
         $parameters = [
             'document' => $document,
@@ -161,7 +162,7 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         list($name, $typeMap) = $this->getDefaultTypeMap();
         $document = new Product();
         $document->id = 'testid';
-        $document->setUrls([]);
+        $document->urls = [];
         $parameters = [
             'document' => $document,
             'test' => 'test',
@@ -172,17 +173,17 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         // Case #7: when requesting specific url with key, that url should be generated.
         list($name, $typeMap) = $this->getDefaultTypeMap();
 
-        $url71 = new UrlObject();
-        $url71->setUrl('test/url0');
-        $url72 = new UrlObject();
-        $url72->setUrl('test/url1');
-        $url72->setKey('url1');
-        $url73 = new UrlObject();
-        $url73->setUrl('test/url2');
-        $url73->setKey('url2');
+        $url71 = new UrlNested();
+        $url71->url = 'test/url0';
+        $url72 = new UrlNested();
+        $url72->url = 'test/url1';
+        $url72->key = 'url1';
+        $url73 = new UrlNested();
+        $url73->url = 'test/url2';
+        $url73->key = 'url2';
 
         $document = new Product();
-        $document->setUrls(new \ArrayIterator([$url71, $url72, $url73]));
+        $document->urls = new \ArrayIterator([$url71, $url72, $url73]);
         $parameters = [
             'document' => $document,
             '_seo_key' => 'url2',
@@ -194,15 +195,15 @@ class SeoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         // Case #8: when requesting specific url with key that does not exist, default url should be generated.
         list($name, $typeMap) = $this->getDefaultTypeMap();
 
-        $url81 = new UrlObject();
-        $url81->setUrl('test/url1');
-        $url81->setKey('url1');
-        $url82 = new UrlObject();
-        $url82->setUrl('test/url2');
-        $url82->setKey('url2');
+        $url81 = new UrlNested();
+        $url81->url = 'test/url1';
+        $url81->key = 'url1';
+        $url82 = new UrlNested();
+        $url82->url = 'test/url2';
+        $url82->key = 'url2';
 
         $document = new Product();
-        $document->setUrls(new \ArrayIterator([$url81, $url82]));
+        $document->urls = new \ArrayIterator([$url81, $url82]);
         $parameters = [
             'document' => $document,
             '_seo_key' => 'url3',

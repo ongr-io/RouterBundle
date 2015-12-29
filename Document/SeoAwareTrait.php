@@ -30,48 +30,9 @@ trait SeoAwareTrait
      * )
      * </code>
      *
-     * @var UrlObject[]|\Iterator
+     * @var UrlNested[]|\Iterator
      *
      * @ES\Property(name="urls", type="nested", objectName="ONGRRouterBundle:UrlNested", multiple=true)
      */
-    protected $urls = [];
-
-    /**
-     * @var string[] Array of expired url hashes.
-     *
-     * @ES\Property(name="expired_urls", type="string")
-     */
-    protected $expiredUrls = [];
-
-    /**
-     * @return \Iterator|UrlObject[]
-     */
-    public function getUrls()
-    {
-        return $this->urls;
-    }
-
-    /**
-     * @param \Iterator|UrlObject[] $urls
-     */
-    public function setUrls($urls)
-    {
-        $this->urls = $urls;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getExpiredUrls()
-    {
-        return $this->expiredUrls;
-    }
-
-    /**
-     * @param string[] $expiredUrls
-     */
-    public function setExpiredUrls($expiredUrls)
-    {
-        $this->expiredUrls = $expiredUrls;
-    }
+    public $urls = [];
 }

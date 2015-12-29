@@ -11,8 +11,6 @@
 
 namespace ONGR\RouterBundle\Routing;
 
-use ONGR\ElasticsearchBundle\Document\DocumentInterface;
-use ONGR\RouterBundle\Document\SeoAwareInterface;
 use ONGR\RouterBundle\Document\UrlNested;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -50,9 +48,7 @@ class SeoUrlGenerator extends UrlGenerator
     {
         foreach ($this->typeMap as $params) {
             if ($params['_route'] == $name) {
-                /** @var DocumentInterface|SeoAwareInterface $document */
                 $document = $parameters['document'];
-
                 $key = null;
                 if (isset($parameters['_seo_key'])) {
                     $key = $parameters['_seo_key'];
@@ -97,14 +93,14 @@ class SeoUrlGenerator extends UrlGenerator
     /**
      * Returns URL for a document.
      *
-     * @param SeoAwareInterface $document Document.
-     * @param string            $key      Optional URL key.
+     * @param object $document Document.
+     * @param string $key      Optional URL key.
      *
      * @return string|null
      */
     public static function getLinkByDocument($document, $key = null)
     {
-        $urls = $document->getUrls();
+        $urls = $document->urls;
 
         if (!count($urls)) {
             return null;
@@ -114,9 +110,9 @@ class SeoUrlGenerator extends UrlGenerator
             $keyUrl = null;
             /** @var UrlNested $url */
             foreach ($urls as $url) {
-                $urlKeyValue = $url->getKey();
+                $urlKeyValue = $url->key;
                 if (!empty($urlKeyValue) && $urlKeyValue === $key) {
-                    $keyUrl = $url->getUrl();
+                    $keyUrl = $url->url;
                     break;
                 }
             }
@@ -129,6 +125,6 @@ class SeoUrlGenerator extends UrlGenerator
         /** @var UrlNested $currentUrl */
         $currentUrl = $urls->current();
 
-        return $currentUrl->getUrl();
+        return $currentUrl->url;
     }
 }

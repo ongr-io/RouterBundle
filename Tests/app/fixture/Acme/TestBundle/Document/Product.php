@@ -13,6 +13,7 @@ namespace ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
 use ONGR\ElasticsearchBundle\Document\AbstractDocument;
+use ONGR\ElasticsearchBundle\Document\DocumentTrait;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
 
 /**
@@ -20,7 +21,8 @@ use ONGR\RouterBundle\Document\SeoAwareTrait;
  *
  * @ES\Document(type="product")
  */
-class Product extends AbstractDocument
+class Product
 {
+    use DocumentTrait;
     use SeoAwareTrait;
 }
