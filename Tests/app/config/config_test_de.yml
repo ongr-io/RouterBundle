@@ -1,5 +1,0 @@
-imports:
-    - { resource: config_test.yml }
-
-ongr_router:
-    seo_key: de

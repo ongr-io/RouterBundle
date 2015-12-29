@@ -24,10 +24,9 @@ class AppKernel extends Kernel
     {
         return [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
             new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
             new ONGR\RouterBundle\ONGRRouterBundle(),
-            new ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\AcmeTestBundle()
+            new ONGR\RouterBundle\Tests\app\fixture\AppBundle\AppBundle(),
         ];
     }
 

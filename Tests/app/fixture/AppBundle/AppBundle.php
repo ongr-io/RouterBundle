@@ -9,15 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle;
+namespace ONGR\RouterBundle\Tests\app\fixture\AppBundle;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\DependencyInjection\Compiler\DocumentLoaderPass;
 
 /**
  * Bundle.
  */
-class AcmeTestBundle extends Bundle
+class AppBundle extends Bundle
 {
 }

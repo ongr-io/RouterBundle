@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace ONGR\RouterBundle\Tests\app\fixture\Acme\TestBundle\Document;
+namespace ONGR\RouterBundle\Tests\app\fixture\AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
-use ONGR\ElasticsearchBundle\Document\AbstractDocument;
 use ONGR\ElasticsearchBundle\Document\DocumentTrait;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
 
