@@ -1,2 +1,0 @@
-parameters:
-    router.request_context.class: ONGR\RouterBundle\Routing\RequestContext

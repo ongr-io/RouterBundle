@@ -1,6 +1,15 @@
-parameters:
-    ongr_router.seo_url_mapper.class: ONGR\RouterBundle\Service\SeoUrlMapper
-
 services:
+    ongr_router.chain_router:
+        class: Symfony\Cmf\Component\Routing\ChainRouter
+        arguments: [ @?logger ]
+        calls:
+            - [ setContext, [ @router.request_context ] ]
+
+    ongr_router.router:
+        parent: router.default
+        class: ONGR\RouterBundle\Routing\Router
+        tags:
+            - { name: router, priority: -100 }
+
     ongr_router.seo_url_mapper:
-        class: %ongr_router.seo_url_mapper.class%
+        class: ONGR\RouterBundle\Service\SeoUrlMapper
