@@ -1,15 +1,22 @@
 services:
     ongr_router.chain_router:
         class: Symfony\Cmf\Component\Routing\ChainRouter
-        arguments: [ @?logger ]
+        arguments: [ "@?logger" ]
         calls:
-            - [ setContext, [ @router.request_context ] ]
+            - [ setContext, [ "@router.request_context" ] ]
 
-    ongr_router.router:
-        parent: router.default
-        class: ONGR\RouterBundle\Routing\Router
-        tags:
-            - { name: router, priority: -100 }
+    ongr_router.elasticsearch_route_provider:
+        class: ONGR\RouterBundle\Routing\ElasticsearchRouteProvider
+        arguments: [%ongr_router.seo_routes%]
 
-    ongr_router.seo_url_mapper:
-        class: ONGR\RouterBundle\Service\SeoUrlMapper
+    ongr_router.nested_matcher:
+        class: Symfony\Cmf\Component\Routing\NestedMatcher\NestedMatcher
+        arguments: ["@ongr_router.elasticsearch_route_provider"]
+
+    ongr_router.url_generator:
+        class: Symfony\Cmf\Component\Routing\ContentAwareGenerator
+        arguments: ["@ongr_router.elasticsearch_route_provider", "@?logger"]
+
+    ongr_router.dynamic_router:
+        class: Symfony\Cmf\Component\Routing\DynamicRouter
+        arguments: ["@router.request_context", "@ongr_router.nested_matcher", "@ongr_router.url_generator", '', "@event_dispatcher", "@ongr_router.elasticsearch_route_provider"]
