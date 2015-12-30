@@ -10,7 +10,7 @@ services:
 
     ongr_router.elasticsearch_route_provider:
         class: ONGR\RouterBundle\Routing\ElasticsearchRouteProvider
-        arguments: [%ongr_router.seo_routes%, "@es.metadata_collector"]
+        arguments: ["@es.metadata_collector", %ongr_router.seo_routes%]
 
     ongr_router.final_matcher:
         class: Symfony\Cmf\Component\Routing\NestedMatcher\UrlMatcher

@@ -42,12 +42,13 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
     /**
      * ElasticsearchRouteProvider constructor.
      *
-     * @param array $routeMap
+     * @param MetadataCollector $collector
+     * @param array             $routeMap
      */
-    public function __construct(array $routeMap = [], $collector)
+    public function __construct($collector, array $routeMap = [])
     {
-        $this->routeMap = $routeMap;
         $this->collector = $collector;
+        $this->routeMap = $routeMap;
     }
 
     /**
