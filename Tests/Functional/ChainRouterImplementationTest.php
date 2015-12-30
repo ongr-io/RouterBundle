@@ -12,6 +12,7 @@
 namespace ONGR\RouterBundle\Tests\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ChainRouterImplementationTest extends WebTestCase
 {

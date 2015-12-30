@@ -47,4 +47,19 @@ class ElasticsearchRouterTest extends AbstractElasticsearchTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Acme', $crawler->html());
     }
+
+    /**
+     * Check router instance.
+     *
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function testNotExistingRoute()
+    {
+        $this->getManager();
+
+        $client = static::createClient();
+        $client->request('GET', '/definitely-not-existing-route');
+
+        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+    }
 }
