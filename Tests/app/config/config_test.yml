@@ -25,10 +25,10 @@ ongr_elasticsearch:
         default:
             connection: default
             mappings:
-                - AcmeTestBundle
+                - AppBundle
 
 ongr_router:
-    es_manager: default
+    manager: es.manager.default
     seo_routes:
-        "AcmeTestBundle:Product":"AppBundle:Test:document"
+        product: AppBundle:Test:document
 
