@@ -5,13 +5,20 @@ services:
         calls:
             - [ setContext, [ "@router.request_context" ] ]
 
+    ongr_router.dummy_route_collection:
+        class: Symfony\Component\Routing\RouteCollection
+
     ongr_router.elasticsearch_route_provider:
         class: ONGR\RouterBundle\Routing\ElasticsearchRouteProvider
-        arguments: [%ongr_router.seo_routes%]
+        arguments: [%ongr_router.seo_routes%, "@es.metadata_collector"]
+
+    ongr_router.final_matcher:
+        class: Symfony\Cmf\Component\Routing\NestedMatcher\UrlMatcher
+        arguments: ["@ongr_router.dummy_route_collection", "@router.request_context"]
 
     ongr_router.nested_matcher:
         class: Symfony\Cmf\Component\Routing\NestedMatcher\NestedMatcher
-        arguments: ["@ongr_router.elasticsearch_route_provider"]
+        arguments: ["@ongr_router.elasticsearch_route_provider", "@ongr_router.final_matcher"]
 
     ongr_router.url_generator:
         class: Symfony\Cmf\Component\Routing\ContentAwareGenerator

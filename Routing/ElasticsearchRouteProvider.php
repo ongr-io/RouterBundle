@@ -11,6 +11,7 @@
 
 namespace ONGR\RouterBundle\Routing;
 
+use ONGR\ElasticsearchBundle\Mapping\MetadataCollector;
 use ONGR\ElasticsearchBundle\Result\Result;
 use ONGR\ElasticsearchBundle\Service\Manager;
 use ONGR\ElasticsearchDSL\Query\MatchQuery;
@@ -34,13 +35,19 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
     private $manager;
 
     /**
+     * @var MetadataCollector
+     */
+    private $collector;
+
+    /**
      * ElasticsearchRouteProvider constructor.
      *
      * @param array $routeMap
      */
-    public function __construct(array $routeMap = [])
+    public function __construct(array $routeMap = [], $collector)
     {
         $this->routeMap = $routeMap;
+        $this->collector = $collector;
     }
 
     /**
@@ -70,7 +77,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
             throw new \Exception('Manager must be set to execute query to the elasticsearch');
         }
 
-        $collection =  new RouteCollection();
+        $routeCollection =  new RouteCollection();
         $requestPath = $request->getPathInfo();
 
         $search = new Search();
@@ -78,9 +85,23 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
 
         $results = $this->manager->execute(array_keys($this->routeMap), $search, Result::RESULTS_OBJECT);
 
-        foreach ($results as $result) {
-            //Boom, you are doomed!
+        foreach ($results as $document) {
+
+            $type = $this->collector->getDocumentType(get_class($document));
+
+            if (array_key_exists($type, $this->routeMap)) {
+                $route = new Route(
+                    $requestPath,
+                    [
+                        '_controller' => $this->routeMap[$type],
+                        'document' => $document
+                    ]
+                );
+                $routeCollection->add('ongr_route_'.$type, $route);
+            }
         }
+
+        return $routeCollection;
     }
 
     /**
