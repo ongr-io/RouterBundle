@@ -11,26 +11,36 @@
 
 namespace ONGR\RouterBundle\Tests\app\fixture\AppBundle\Controller;
 
+use ONGR\ElasticsearchBundle\Tests\app\fixture\Acme\BarBundle\Document\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Dummy test controller.
  */
 class TestController extends Controller
 {
+
+    /**
+     * Action that returns 'OK'
+     *
+     * @return JsonResponse
+     */
+    public function homeAction()
+    {
+        return new Response('OK');
+    }
+
     /**
      * Action that already receives document and SEO key.
      *
-     * @param object $document Document.
+     * @param Product $document Document.
      *
      * @return JsonResponse
      */
     public function documentAction($document)
     {
-        $response = new JsonResponse();
-        $response->setData(['id' => $document->id]);
-
-        return $response;
+        return new Response($document->title);
     }
 }

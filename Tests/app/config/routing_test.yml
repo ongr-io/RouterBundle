@@ -1,12 +1,4 @@
-ongr_test_show:
-    path:  /test/{documentId}/
-    defaults: { _controller: AcmeTestBundle:Test:testId }
-
-ongr_test_document_page:
-    path:  /testDocument/{document}
-    defaults: { _controller: AcmeTestBundle:Test:testDocument }
-
-ongr_default_route:
-    path: /default
+ongr_router.home:
+    path: /
     defaults:
-        _controller: AcmeTestBundle:Test:testDefault
+        _controller: AppBundle:Test:home

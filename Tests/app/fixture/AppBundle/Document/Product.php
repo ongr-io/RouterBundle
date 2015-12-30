@@ -24,4 +24,9 @@ class Product
 {
     use DocumentTrait;
     use SeoAwareTrait;
+
+    /**
+     * @ES\Property(type="string")
+     */
+    public $title;
 }
