@@ -87,18 +87,8 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
         $results = $this->manager->execute(array_keys($this->routeMap), $search, Result::RESULTS_OBJECT);
 
         foreach ($results as $document) {
-
-            $type = $this->collector->getDocumentType(get_class($document));
-
-            if (array_key_exists($type, $this->routeMap)) {
-                $route = new Route(
-                    $requestPath,
-                    [
-                        '_controller' => $this->routeMap[$type],
-                        'document' => $document
-                    ]
-                );
-                $routeCollection->add('ongr_route_'.$type, $route);
+            if ($route = $this->getRouteFromDocument($document)) {
+                $routeCollection->add('ongr_route_'.$route->getDefault('type'), $route);
             }
         }
 
@@ -110,7 +100,33 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
      */
     public function getRouteByName($name)
     {
-        // TODO: Implement getRouteByName() method.
+        $args = func_get_args();
+        $parameters = $args[1];
+        return $this->getRouteFromDocument($parameters['document']);
+    }
+
+    private function getRouteFromDocument($document)
+    {
+        try {
+            $type = $this->collector->getDocumentType(get_class($document));
+
+            if (array_key_exists($type, $this->routeMap)) {
+                $route = new Route(
+                    $document->url,
+                    [
+                        '_controller' => $this->routeMap[$type],
+                        'document' => $document,
+                        'type' => $type,
+                    ]
+                );
+
+                return $route;
+            } else {
+                throw new RouteNotFoundException(sprintf('Route for type %s% cannot be generated.', $type));
+            }
+        } catch (\Exception $e) {
+            throw new RouteNotFoundException('Document is not correct or route cannot be generated.');
+        }
     }
 
     /**
@@ -118,6 +134,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
      */
     public function getRoutesByNames($names)
     {
-        // TODO: Implement getRoutesByNames() method.
+        // Returns empty Route collection.
+        return new RouteCollection();
     }
 }

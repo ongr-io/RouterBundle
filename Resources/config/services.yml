@@ -21,7 +21,7 @@ services:
         arguments: ["@ongr_router.elasticsearch_route_provider", "@ongr_router.final_matcher"]
 
     ongr_router.url_generator:
-        class: Symfony\Cmf\Component\Routing\ContentAwareGenerator
+        class: Symfony\Cmf\Component\Routing\ProviderBasedGenerator
         arguments: ["@ongr_router.elasticsearch_route_provider", "@?logger"]
 
     ongr_router.dynamic_router:

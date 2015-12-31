@@ -20,7 +20,7 @@ class ElasticsearchRouteGenerationTest extends WebTestCase
         $router = $client->getContainer()->get('router');
 
 //        $url = $router->generate('ongr_route_product', ['document' => $document]);
-        $url = $router->generate($document);
+        $url = $router->generate('ongr_route_product', ['document' => $document]);
 
         $this->assertEquals($document->url, $url);
     }
