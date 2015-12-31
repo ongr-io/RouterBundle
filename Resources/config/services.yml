@@ -24,6 +24,13 @@ services:
         class: Symfony\Cmf\Component\Routing\ProviderBasedGenerator
         arguments: ["@ongr_router.elasticsearch_route_provider", "@?logger"]
 
+    ongr_router.symfony_default_router:
+        parent: router.default
+        tags:
+            - { name: router, priority: 100 }
+
     ongr_router.dynamic_router:
         class: Symfony\Cmf\Component\Routing\DynamicRouter
         arguments: ["@router.request_context", "@ongr_router.nested_matcher", "@ongr_router.url_generator", '', "@event_dispatcher", "@ongr_router.elasticsearch_route_provider"]
+        tags:
+            - { name: router, priority: -100 }
