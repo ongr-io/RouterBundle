@@ -16,17 +16,14 @@ Let's say we have following document:
 
 ```json
 {
-    "urls": [
-        {
-            "url": "drums/"
-        }
-    ]
+    ...,
+    "url": "/drums"
 }
 ```
 
-In order to generate link to this document (referenced by variable `product`) we would add this line to TWIG template `{{ path('ongr_product', {'document': product}) }}`. This will result in `drums/` 
+In order to generate link to this document (referenced by variable `product`) we would add this line to TWIG template `{{ path('ongr_route_product', {'document': product}) }}`. This will result in `drums/` 
 
-> It is assumed that route `ongr_product` is defined as described in [README](../../README.md).
+> The route `ongr_route_product` is generated from `seo_routes` parameter type name, so it's formed by: `ongr_route_<type-name>`.
 
 ### URL matching
 
@@ -40,5 +37,4 @@ As shown in [README example](../../README.md#step-4-create-an-action-for-product
 > Note that it is default behaviour and it can be easily changed by adding and removing routers from chain. [More info](chain_router.md)
 
 ## Advanced usage
-* [SEO keys explained](seo_keys.md)
 * [How to add custom router](chain_router.md)
