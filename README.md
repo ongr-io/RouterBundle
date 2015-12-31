@@ -10,15 +10,9 @@ If you have any questions, don't hesitate to ask them on [![Join the chat at htt
  chat, or just come to say Hi ;).
  
 [![Build Status](https://travis-ci.org/ongr-io/RouterBundle.svg?branch=master)](https://travis-ci.org/ongr-io/RouterBundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ongr-io/RouterBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ongr-io/RouterBundle/?branch=master)
-[![Code Climate](https://codeclimate.com/github/ongr-io/RouterBundle/badges/gpa.svg)](https://codeclimate.com/github/ongr-io/RouterBundle)
 [![Coverage Status](https://coveralls.io/repos/ongr-io/RouterBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/ongr-io/RouterBundle?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/61b9cee8-6150-4566-b04b-7b53d0a790fd/mini.png)](https://insight.sensiolabs.com/projects/61b9cee8-6150-4566-b04b-7b53d0a790fd)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/eb45b9135f974c67ae1bbecbed1115f2)](https://www.codacy.com/app/ongr/RouterBundle)
 [![Latest Stable Version](https://poser.pugx.org/ongr/router-bundle/v/stable)](https://packagist.org/packages/ongr/router-bundle)
-[![Total Downloads](https://poser.pugx.org/ongr/router-bundle/downloads)](https://packagist.org/packages/ongr/router-bundle)
-[![Latest Unstable Version](https://poser.pugx.org/ongr/router-bundle/v/unstable)](https://packagist.org/packages/ongr/router-bundle)
-[![License](https://poser.pugx.org/ongr/router-bundle/license)](https://packagist.org/packages/ongr/router-bundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ongr-io/RouterBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ongr-io/RouterBundle/?branch=master)
 
 ## Documentation
 
