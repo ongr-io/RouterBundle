@@ -105,6 +105,13 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
         return $this->getRouteFromDocument($parameters['document']);
     }
 
+    /**
+     * Resolvs route from document object.
+     *
+     * @param $document
+     *
+     * @return Route
+     */
     private function getRouteFromDocument($document)
     {
         try {
