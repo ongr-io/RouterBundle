@@ -39,7 +39,7 @@ public function registerBundles()
     $bundles = array(
         // ...
         new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
-    	new ONGR\RouterBundle\ONGRRouterBundle(),
+        new ONGR\RouterBundle\ONGRRouterBundle(),
     );
 }
 
@@ -77,27 +77,26 @@ ongr_elasticsearch:
 ongr_router:
     es_manager: default
     seo_routes:
-        product: # <- document type here
-            _route: ongr_product
-            _controller: AppBundle:Product:document
-            _default_route: ~
-            _id_param: ~
-        # seo routes for other types
+        product: AppBundle:Product:document
         # ...
 
 ```
+
+> WARNING: If SeoAwareTrait is used you must implement `urlAnalyzer` analyzer, otherwise there will be a fatal error on index create.
 
 At `_controller` you define controller and action for every document type.
 `_route` is a name of this route and it can be used at path generation.
 
 `urlAnalyzer` at `ongr_elasticsearch` configuration defines how all url fields are analyzed by Elasticsearch.
+
 Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/mapping.md) for more information about the configuration.
 
 
-#### Step 3: Create a Product document
+## Usage example
 
-Lets create a `Product` class in the `Document` folder. We assume that we have an AppBundle installed.
-> Folder name could not be changed, please make sure you put your documents in the right place.
+#### Step 1: Create a Product document
+
+Lets create a `Product` document class. We assume that we have an AppBundle installed.
 
 ```php
 <?php
@@ -106,39 +105,30 @@ Lets create a `Product` class in the `Document` folder. We assume that we have a
 namespace AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
-use ONGR\ElasticsearchBundle\Document\AbstractDocument;
+use ONGR\ElasticsearchBundle\Document\DocumentTrait;
 
 /**
  * @ES\Document()
  */
-class Product extends AbstractDocument
+class Product
 {
-    use SeoAwareTrait; // <- Trait for URLs
+    use DocumentTrait;
+    use SeoAwareTrait; // <- Trait for URL's
 
     /**
-     * @var string
-     *
-     * @ES\Property(name="title", type="string")
+     * @ES\Property(type="string")
      */
-    private $title;
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
+    public $title;
 
     // ...
 }
 
 ```
 
-In order to have friendly URLs, the Document has to use `SeoAwareTrait`.
+In favor to support friendly URLs, the bundle provides `SeoAwareTrait` with predefined mapping.
 
 
-#### Step 4: Create an action for product page
+#### Step 2: Create controller and action for the product page
 
 ```php
 <?php
@@ -152,21 +142,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
-    public function documentAction(Product $document, $seoKey)
+    public function documentAction(Product $document)
     {
-        return new Response("Product: " . $document->getTitle());
+        return new Response("Product: " . $document->title);
     }
 }
 ```
 
-#### Step 5: Create index and insert demo product
+#### Step 3: Create index and insert demo product
 
 Create an elasticsearch index by running this command in your terminal:
 
 ```bash
 
     app/console ongr:es:index:create
-
+    
 ```
 
 > More info about all commands can be found in the [Elasticsearch bundle commands chapter](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/commands.md).
@@ -175,12 +165,14 @@ Also, run the following curl command in your terminal to insert a product for th
 
 ```bash
 
-    curl -XPOST 'http://localhost:9200/acme/product?pretty=1' -d '{"title":"Acoustic Guitar","urls":[{"url":"music/acoustic-guitar/"}],"expired_urls":[]}'
+    curl -XPOST 'http://localhost:9200/acme/product?pretty=1' -d '{"title":"Acoustic Guitar", "url":"/music/electric-guitar"}'
+    
 ```
 
-#### Step 6: Check if it works
+#### Step 4: Check if it works
 
-Just visit `/music/acoustic-guitar` page and you should see a title of the product that you inserted in **step 5**.
+Just visit `/music/electric-guitar` page and you should see a title of the product that you inserted in **step 3**.
+
 
 ## License
 
