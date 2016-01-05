@@ -21,8 +21,10 @@ services:
         arguments: ["@ongr_router.elasticsearch_route_provider", "@ongr_router.final_matcher"]
 
     ongr_router.url_generator:
-        class: Symfony\Cmf\Component\Routing\ProviderBasedGenerator
+        class: ONGR\RouterBundle\Routing\DocumentUrlGenerator
         arguments: ["@ongr_router.elasticsearch_route_provider", "@?logger"]
+        calls:
+            - [ setCollector, [ "@es.metadata_collector" ] ]
 
     ongr_router.symfony_default_router:
         parent: router.default
