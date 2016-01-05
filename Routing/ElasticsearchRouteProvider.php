@@ -25,7 +25,7 @@ use Symfony\Component\Routing\RouteCollection;
 class ElasticsearchRouteProvider implements RouteProviderInterface
 {
     /**
-     * @var array Route map configuration to map Elasticsearch types and Controllers
+     * @var array Route map configuration to map Elasticsearch types and Controllers.
      */
     private $routeMap;
 
@@ -43,7 +43,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
      * ElasticsearchRouteProvider constructor.
      *
      * @param MetadataCollector $collector
-     * @param array             $routeMap
+     * @param array $routeMap
      */
     public function __construct($collector, array $routeMap = [])
     {
@@ -78,18 +78,33 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
             throw new \Exception('Manager must be set to execute query to the elasticsearch');
         }
 
-        $routeCollection =  new RouteCollection();
+        $routeCollection = new RouteCollection();
         $requestPath = $request->getPathInfo();
 
         $search = new Search();
         $search->addQuery(new MatchQuery('url', $requestPath));
 
         $results = $this->manager->execute(array_keys($this->routeMap), $search, Result::RESULTS_OBJECT);
+        try {
+            foreach ($results as $document) {
+                $type = $this->collector->getDocumentType(get_class($document));
+                if (array_key_exists($type, $this->routeMap)) {
+                    $route = new Route(
+                        $document->url,
+                        [
+                            '_controller' => $this->routeMap[$type],
+                            'document' => $document,
+                            'type' => $type,
+                        ]
+                    );
 
-        foreach ($results as $document) {
-            if ($route = $this->getRouteFromDocument($document)) {
-                $routeCollection->add('ongr_route_'.$route->getDefault('type'), $route);
+                    $routeCollection->add('ongr_route_' . $route->getDefault('type'), $route);
+                } else {
+                    throw new RouteNotFoundException(sprintf('Route for type %s% cannot be generated.', $type));
+                }
             }
+        } catch (\Exception $e) {
+            throw new RouteNotFoundException('Document is not correct or route cannot be generated.');
         }
 
         return $routeCollection;
@@ -100,40 +115,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
      */
     public function getRouteByName($name)
     {
-        $args = func_get_args();
-        $parameters = $args[1];
-        return $this->getRouteFromDocument($parameters['document']);
-    }
-
-    /**
-     * Resolvs route from document object.
-     *
-     * @param $document
-     *
-     * @return Route
-     */
-    private function getRouteFromDocument($document)
-    {
-        try {
-            $type = $this->collector->getDocumentType(get_class($document));
-
-            if (array_key_exists($type, $this->routeMap)) {
-                $route = new Route(
-                    $document->url,
-                    [
-                        '_controller' => $this->routeMap[$type],
-                        'document' => $document,
-                        'type' => $type,
-                    ]
-                );
-
-                return $route;
-            } else {
-                throw new RouteNotFoundException(sprintf('Route for type %s% cannot be generated.', $type));
-            }
-        } catch (\Exception $e) {
-            throw new RouteNotFoundException('Document is not correct or route cannot be generated.');
-        }
+        throw new RouteNotFoundException('Dynamic provider generates routes on the fly.');
     }
 
     /**
