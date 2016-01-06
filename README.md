@@ -82,7 +82,7 @@ ongr_elasticsearch:
                 - AppBundle
 
 ongr_router:
-    es_manager: default
+    manager: es.manager.default
     seo_routes:
         product: AppBundle:Product:document
         # ...
