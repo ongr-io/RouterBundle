@@ -12,7 +12,6 @@
 namespace ONGR\RouterBundle\Tests\app\fixture\AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
-use ONGR\ElasticsearchBundle\Document\DocumentTrait;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
 
 /**
@@ -22,8 +21,12 @@ use ONGR\RouterBundle\Document\SeoAwareTrait;
  */
 class Product
 {
-    use DocumentTrait;
     use SeoAwareTrait;
+
+    /**
+     * @ES\Id()
+     */
+    public $id;
 
     /**
      * @ES\Property(type="string")
