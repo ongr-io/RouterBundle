@@ -38,16 +38,15 @@ composer require ongr/router-bundle "~1.0"
 Enable Router and Elasticsearch bundles in your AppKernel:
 
 ```php
-<?php
 // app/AppKernel.php
 
 public function registerBundles()
 {
-    $bundles = array(
+    $bundles = [
         // ...
         new ONGR\ElasticsearchBundle\ONGRElasticsearchBundle(),
         new ONGR\RouterBundle\ONGRRouterBundle(),
-    );
+    ];
 }
 
 ```
@@ -61,7 +60,8 @@ Add minimal configuration for Router and Elasticsearch bundles.
 
 ```yaml
 
-#app/config/config.yml
+# app/config/config.yml
+
 ongr_elasticsearch:
     analysis:
         analyzer:
@@ -84,7 +84,7 @@ ongr_elasticsearch:
 ongr_router:
     manager: es.manager.default
     seo_routes:
-        product: AppBundle:Product:document
+        'AppBundle:Product': AppBundle:Product:document
         # ...
 
 ```
@@ -106,20 +106,17 @@ Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/Elasticsea
 Lets create a `Product` document class. We assume that we have an AppBundle installed.
 
 ```php
-<?php
 // src/AppBundle/Document/Product.php
 
 namespace AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
-use ONGR\ElasticsearchBundle\Document\DocumentTrait;
 
 /**
  * @ES\Document()
  */
 class Product
 {
-    use DocumentTrait;
     use SeoAwareTrait; // <- Trait for URL's
 
     /**
@@ -138,7 +135,6 @@ In favor to support friendly URLs, the bundle provides `SeoAwareTrait` with pred
 #### Step 2: Create controller and action for the product page
 
 ```php
-<?php
 // src/AppBundle/Controller/ProductController.php
 
 namespace AppBundle\Controller;

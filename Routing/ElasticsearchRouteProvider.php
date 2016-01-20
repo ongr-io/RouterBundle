@@ -70,7 +70,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getRouteCollectionForRequest(Request $request)
     {
@@ -88,7 +88,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
         try {
             foreach ($results as $document) {
                 $type = $this->collector->getDocumentType(get_class($document));
-                if (array_key_exists($type, $this->routeMap)) {
+                if (isset($this->routeMap[$type])) {
                     $route = new Route(
                         $document->url,
                         [
@@ -111,7 +111,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getRouteByName($name)
     {
@@ -119,7 +119,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getRoutesByNames($names)
     {
