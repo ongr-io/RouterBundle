@@ -70,14 +70,8 @@ class DocumentUrlGenerator extends ProviderBasedGenerator
         if (!is_string($name)) {
             throw new RouteNotFoundException('Route ' . $name . ' is not a string');
         }
-        $contains = false;
-        foreach ($this->provider->getRouteMap() as $key => $value) {
-            if ($name == 'ongr_route_' . $key) {
-                $contains = true;
-            }
-            if(!$contains){
-                throw new RouteNotFoundException('Route ' . $name . ' is not a valid name: make sure the name is ongr_route_<type-name>');
-            }
+        if ($name != 'ongr_route') {
+            throw new RouteNotFoundException('Route ' . $name . ' is not a valid name: make sure the name is ongr_route');
         }
     }
 
