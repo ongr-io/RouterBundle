@@ -68,6 +68,13 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
     {
         $this->manager = $manager;
     }
+    /**
+     * @return array
+     */
+    public function getRouteMap()
+    {
+        return $this->routeMap;
+    }
 
     /**
      * @inheritDoc

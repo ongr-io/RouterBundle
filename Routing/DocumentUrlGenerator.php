@@ -61,13 +61,34 @@ class DocumentUrlGenerator extends ProviderBasedGenerator
     }
 
     /**
+     * Checks if the $name is a valid string for a route
+     * @param $name
+     * @throws RouteNotFoundException
+     */
+    private function nameHandle($name)
+    {
+        if (!is_string($name)) {
+            throw new RouteNotFoundException('Route ' . $name . ' is not a string');
+        }
+        $contains = false;
+        foreach ($this->provider->getRouteMap() as $key => $value) {
+            if ($name == 'ongr_route_' . $key) {
+                $contains = true;
+            }
+            if(!$contains){
+                throw new RouteNotFoundException('Route ' . $name . ' is not a valid name: make sure the name is ongr_route_<type-name>');
+            }
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
         try {
             $document = $parameters['document'];
-
+            $this->nameHandle($name);
             if (is_object($document)) {
                 $documentUrl = $document->url;
             } else {
