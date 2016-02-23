@@ -19,7 +19,7 @@ class DocumentUrlGeneratorTest extends WebTestCase
         $client = static::createClient();
         $router = $client->getContainer()->get('router');
 
-        $url = $router->generate('ongr_route_product', ['document' => $document]);
+        $url = $router->generate('ongr_route', ['document' => $document]);
 
         $this->assertEquals($document->url, $url);
     }
