@@ -116,7 +116,6 @@ class DocumentUrlGenerator extends ProviderBasedGenerator
                 $referenceType,
                 $hostTokens
             );
-
         } catch (\Exception $e) {
             throw new RouteNotFoundException('Document is not correct or route cannot be generated.');
         }
