@@ -30,4 +30,4 @@ ongr_elasticsearch:
 ongr_router:
     manager: es.manager.default
     seo_routes:
-        product: AppBundle:Test:document
+        'AppBundle:Product': AppBundle:Test:document
