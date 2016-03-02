@@ -89,7 +89,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
         $requestPath = $request->getPathInfo();
 
         $search = new Search();
-        $search->addQuery(new MatchQuery('url', $requestPath));
+        $search->addFilter(new MatchQuery('url', $requestPath));
 
         $results = $this->manager->execute(array_keys($this->routeMap), $search, Result::RESULTS_OBJECT);
         try {
