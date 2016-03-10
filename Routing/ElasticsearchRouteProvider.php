@@ -108,7 +108,6 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
                         );
                         $routeCollection->add('ongr_route_' . $route->getDefault('type') . '_' . $i, $route);
                     }
-
                 } else {
                     throw new RouteNotFoundException(sprintf('Route for type %s% cannot be generated.', $type));
                 }
