@@ -96,16 +96,19 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
             foreach ($results as $document) {
                 $type = $this->collector->getDocumentType(get_class($document));
                 if (isset($this->routeMap[$type])) {
-                    $route = new Route(
-                        $document->url,
-                        [
-                            '_controller' => $this->routeMap[$type],
-                            'document' => $document,
-                            'type' => $type,
-                        ]
-                    );
+                    $urls = is_array($document->url) ? array_values($document->url) : [$document->url];
+                    foreach ($urls as $i => $url) {
+                        $route = new Route(
+                            $url,
+                            [
+                                '_controller' => $this->routeMap[$type],
+                                'document' => $document,
+                                'type' => $type,
+                            ]
+                        );
+                        $routeCollection->add('ongr_route_' . $route->getDefault('type') . '_' . $i, $route);
+                    }
 
-                    $routeCollection->add('ongr_route_' . $route->getDefault('type'), $route);
                 } else {
                     throw new RouteNotFoundException(sprintf('Route for type %s% cannot be generated.', $type));
                 }
