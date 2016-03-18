@@ -12,11 +12,13 @@
 namespace ONGR\RouterBundle\Routing;
 
 use ONGR\ElasticsearchBundle\Mapping\MetadataCollector;
+use ONGR\RouterBundle\Document\SeoAwareInterface;
 use Symfony\Cmf\Component\Routing\ProviderBasedGenerator;
+use Symfony\Cmf\Component\Routing\VersatileGeneratorInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Route;
 
-class DocumentUrlGenerator extends ProviderBasedGenerator
+class DocumentUrlGenerator extends ProviderBasedGenerator implements VersatileGeneratorInterface
 {
     /**
      * @var array Route map configuration to map Elasticsearch types and Controllers.
@@ -61,41 +63,23 @@ class DocumentUrlGenerator extends ProviderBasedGenerator
     }
 
     /**
-     * Checks if the $name is a valid string for a route
-     * @param $name
-     * @throws RouteNotFoundException
-     */
-    private function nameHandle($name)
-    {
-        if (!is_string($name)) {
-            throw new RouteNotFoundException('Route ' . $name . ' is not a string');
-        }
-        if ($name != 'ongr_route') {
-            throw new RouteNotFoundException('Route ' . $name .
-                ' is not a valid name: make sure the name is ongr_route');
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
         try {
-            $document = $parameters['document'];
-            $this->nameHandle($name);
-            if (is_object($document)) {
-                $documentUrl = $document->url;
+            if ($name instanceof SeoAwareInterface) {
+                $documentUrl = $name->getUrl();
             } else {
-                $documentUrl = $document['url'];
+                throw new RouteNotFoundException();
             }
 
-            $type = $this->collector->getDocumentType(get_class($document));
+            $type = $this->collector->getDocumentType(get_class($name));
             $route = new Route(
                 $documentUrl,
                 [
                     '_controller' => $this->routeMap[$type],
-                    'document' => $document,
+                    'document' => $name,
                     'type' => $type,
                 ]
             );
@@ -118,6 +102,35 @@ class DocumentUrlGenerator extends ProviderBasedGenerator
             );
         } catch (\Exception $e) {
             throw new RouteNotFoundException('Document is not correct or route cannot be generated.');
+        }
+    }
+    /**
+     * @param mixed $name The route "name" which may also be an object or anything
+     *
+     * @return bool
+     * @throws RouteNotFoundException
+     */
+    public function supports($name)
+    {
+        if ($name instanceof SeoAwareInterface) {
+            return true;
+        } else {
+            throw new RouteNotFoundException('$name must be an instance of SeoAwareInterface');
+        }
+    }
+    /**
+     * @param mixed $name
+     * @param array $parameters which should contain a content field containing
+     *                          a RouteReferrersReadInterface object
+     *
+     * @return string
+     */
+    public function getRouteDebugMessage($name, array $parameters = array())
+    {
+        if ($name instanceof SeoAwareInterface) {
+            return 'The route object is fit for parsing to generate() method';
+        } else {
+            return $name.' must be an instance of SeoAwareInterface';
         }
     }
 }
