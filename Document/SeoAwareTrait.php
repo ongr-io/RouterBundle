@@ -11,7 +11,7 @@
 
 namespace ONGR\RouterBundle\Document;
 
-use ONGR\ElasticsearchBundle\Annotation as ES;
+use ONGR\ElasticsearchBundle\Annotation;
 
 /**
  * Trait that adds SEO fields to document.
@@ -21,7 +21,7 @@ trait SeoAwareTrait
     /**
      * @var string URL.
      *
-     * @ES\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
+     * @Annotation\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
      */
     public $url;
 }
