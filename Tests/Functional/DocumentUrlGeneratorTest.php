@@ -14,14 +14,38 @@ class DocumentUrlGeneratorTest extends WebTestCase
     {
         $document = new Product();
         $document->title = 'Acme';
-        $document->url = '/acme';
+        $document->setUrl('/acme');
 
         $client = static::createClient();
         $router = $client->getContainer()->get('router');
 
-        $url = $router->generate('ongr_route', ['document' => $document]);
+        $url = $router->generate($document);
 
-        $this->assertEquals($document->url, $url);
+        $this->assertEquals($document->getUrl(), $url);
+    }
+    /**
+     * This test checks if the document is fit for route generation
+     */
+    public function testDocumentRouteGeneration()
+    {
+        $document = new Product();
+        $document->title = 'Acme';
+        $document->setUrl('/acme');
+
+        $client = static::createClient();
+        $router = $client->getContainer()->get('router');
+        $sub_routers =$router->all();
+        $support = false;
+        $message = '';
+        foreach ($sub_routers as $router) {
+            if (method_exists($router, 'supports') && $router->supports($document)) {
+                $support = true;
+                $message = $router->getRouteDebugMessage($document);
+            }
+        }
+
+        $this->assertTrue($support);
+        $this->assertStringMatchesFormat('The route object is fit for parsing to generate() method', $message);
     }
 
     /**

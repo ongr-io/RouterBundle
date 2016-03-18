@@ -12,6 +12,7 @@
 namespace ONGR\RouterBundle\Tests\app\fixture\AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
+use ONGR\RouterBundle\Document\SeoAwareInterface;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
 
 /**
@@ -19,7 +20,7 @@ use ONGR\RouterBundle\Document\SeoAwareTrait;
  *
  * @ES\Document(type="product")
  */
-class Product
+class Product implements SeoAwareInterface
 {
     use SeoAwareTrait;
 

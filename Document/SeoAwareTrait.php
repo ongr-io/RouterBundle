@@ -23,5 +23,21 @@ trait SeoAwareTrait
      *
      * @ES\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
      */
-    public $url;
+    private $url;
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
 }

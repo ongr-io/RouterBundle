@@ -97,7 +97,7 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
                 $type = $this->collector->getDocumentType(get_class($document));
                 if (isset($this->routeMap[$type])) {
                     $route = new Route(
-                        $document->url,
+                        $document->getUrl(),
                         [
                             '_controller' => $this->routeMap[$type],
                             'document' => $document,
