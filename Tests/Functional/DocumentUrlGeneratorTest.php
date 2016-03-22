@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the ONGR package.
+ *
+ * (c) NFQ Technologies UAB <info@nfq.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace ONGR\RouterBundle\Tests\Functional;
 
 use ONGR\RouterBundle\Tests\app\fixture\AppBundle\Document\Product;
@@ -59,5 +68,20 @@ class DocumentUrlGeneratorTest extends WebTestCase
         $url = $router->generate('ongr_router.home', ['param' => ['foo', 'bar']]);
 
         $this->assertEquals('/?param%5B0%5D=foo&param%5B1%5D=bar', $url);
+    }
+
+    /**
+     * Tests unsupported document objects
+     *
+     * @expectedException \Symfony\Component\Routing\Exception\RouteNotFoundException
+     */
+    public function testBadDocumentObject()
+    {
+        $document = new \stdClass();
+
+        $client = static::createClient();
+        $router = $client->getContainer()->get('router');
+
+        $router->generate($document);
     }
 }
