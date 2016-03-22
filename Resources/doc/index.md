@@ -8,9 +8,9 @@ Welcome to the RouterBundle, the part of ONGR bundles family, which helps to hav
 
 ### URL generation
 
-When your document uses [SeoAwareTrait](https://github.com/ongr-io/RouterBundle/blob/master/Document/SeoAwareTrait.php) you have protected property called `$urls`. It contains array of url-key pairs for specific document.
+When your document uses [SeoAwareTrait](https://github.com/ongr-io/RouterBundle/blob/master/Document/SeoAwareTrait.php) you have protected property called `$url`. It contains the url for specific document,
 
-These urls are used for url generation.
+which is used for url generation. Your document also needs to implement [SeoAwareInterface](https://github.com/ongr-io/RouterBundle/blob/master/Document/SeoAwareInterface.php)
 
 Let's say we have following document:
 
@@ -21,7 +21,7 @@ Let's say we have following document:
 }
 ```
 
-In order to generate link to this document (referenced by variable `product`) we would add this line to TWIG template `{{ path('ongr_route_product', {'document': product}) }}`. This will result in `drums/` 
+In order to generate link to this document (referenced by variable `product`) we would add this line to TWIG template `{{ path(product) }}`. This will result in `drums/`
 
 > The route `ongr_route_product` is generated from `seo_routes` parameter type name, so it's formed by: `ongr_route_<type-name>`.
 
