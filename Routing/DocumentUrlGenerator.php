@@ -130,7 +130,7 @@ class DocumentUrlGenerator extends ProviderBasedGenerator implements VersatileGe
         if ($name instanceof SeoAwareInterface) {
             return 'The route object is fit for parsing to generate() method';
         } else {
-            return $name.' must be an instance of SeoAwareInterface';
+            return 'Given route object must be an instance of SeoAwareInterface';
         }
     }
 }
