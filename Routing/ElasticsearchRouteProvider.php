@@ -19,6 +19,7 @@ use ONGR\ElasticsearchDSL\Search;
 use Symfony\Cmf\Component\Routing\RouteProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -82,7 +83,9 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
     public function getRouteCollectionForRequest(Request $request)
     {
         if (!$this->manager) {
-            throw new \Exception('Manager must be set to execute query to the elasticsearch');
+            throw new ParameterNotFoundException(
+                'Manager must be set to execute query to the elasticsearch'
+            );
         }
 
         $routeCollection = new RouteCollection();
