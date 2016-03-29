@@ -111,6 +111,7 @@ Lets create a `Product` document class. We assume that we have an AppBundle inst
 namespace AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
+use ONGR\RouterBundle\Document\SeoAwareTrait;
 
 /**
  * @ES\Document()
