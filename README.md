@@ -91,6 +91,8 @@ ongr_router:
 
 > WARNING: If SeoAwareTrait is used you must implement `urlAnalyzer` analyzer, otherwise there will be a fatal error on index create.
 
+In the configuration of the bundle you need to specify the `es.manager` to use and under the `seo_routes` you have to specify documents that will have seo_routes as keys and the controller action that will handle the request as a values.
+
 At `_controller` you define controller and action for every document type.
 `_route` is a name of this route and it can be used at path generation.
 
@@ -112,11 +114,12 @@ namespace AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
+use ONGR\RouterBundle\Document\SeoAwareInterface;
 
 /**
  * @ES\Document()
  */
-class Product
+class Product implements SeoAwareInterface
 {
     use SeoAwareTrait; // <- Trait for URL's
 
