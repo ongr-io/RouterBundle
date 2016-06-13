@@ -88,15 +88,13 @@ class DocumentUrlGenerator extends ProviderBasedGenerator implements VersatileGe
             $compiledRoute = $route->compile();
             $hostTokens = $compiledRoute->getHostTokens();
 
-            $debug_message = $this->getRouteDebugMessage($name);
-
             return $this->doGenerate(
                 $compiledRoute->getVariables(),
                 $route->getDefaults(),
                 $route->getRequirements(),
                 $compiledRoute->getTokens(),
                 $parameters,
-                $debug_message,
+                'ongr_route',
                 $referenceType,
                 $hostTokens
             );
