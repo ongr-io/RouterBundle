@@ -8,9 +8,11 @@ Welcome to the RouterBundle, the part of ONGR bundles family, which helps to hav
 
 ### URL generation
 
-When your document uses [SeoAwareTrait](https://github.com/ongr-io/RouterBundle/blob/master/Document/SeoAwareTrait.php) you have protected property called `$url`. It contains the url for specific document,
+When your document uses [SeoAwareTrait](https://github.com/ongr-io/RouterBundle/blob/master/Document/SeoAwareTrait.php) you have protected property called `$url`. It contains the url for specific document,which is used for url generation.
 
-which is used for url generation. Your document also needs to implement [SeoAwareInterface](https://github.com/ongr-io/RouterBundle/blob/master/Document/SeoAwareInterface.php)
+Your document must be defined in the configuration of the bundle, under the node `seo_routes`. There you will define the bundle, controller and action that will be called after the router matches the route in your document.
+
+Don't forget that your document also needs to implement [SeoAwareInterface](https://github.com/ongr-io/RouterBundle/blob/master/Document/SeoAwareInterface.php) in order to be used by the ONGR router.
 
 Let's say we have following document:
 
