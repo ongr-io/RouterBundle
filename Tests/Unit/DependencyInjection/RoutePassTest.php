@@ -54,6 +54,7 @@ class RoutePassTest extends \PHPUnit_Framework_TestCase
             $provider
         );
         $container->setParameter('ongr_router.seo_routes', $routes);
+        $container->setParameter('ongr_router.disable_alias', false);
         $container->setParameter('ongr_router.manager', 'es.manager.default');
 
         return $container;
