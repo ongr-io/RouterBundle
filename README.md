@@ -82,6 +82,7 @@ ongr_elasticsearch:
                 - AppBundle
 
 ongr_router:
+    #disable_alias: true    # defaults to false
     manager: es.manager.default
     seo_routes:
         'AppBundle:Product': AppBundle:Product:document
@@ -95,6 +96,9 @@ At `_controller` you define controller and action for every document type.
 `_route` is a name of this route and it can be used at path generation.
 
 `urlAnalyzer` at `ongr_elasticsearch` configuration defines how all url fields are analyzed by Elasticsearch.
+
+If you are using another third party bundle that also has an aliased Symfony router, you may set `disable_alias` to `true`. This
+prevents possible conflicts.
 
 Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/mapping.md) for more information about the configuration.
 
