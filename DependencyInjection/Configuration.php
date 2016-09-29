@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('seo_routes')
                     ->defaultValue([])
+                    ->useAttributeAsKey('name')
                     ->prototype('scalar')->end()
                 ->end()
             ->end();
