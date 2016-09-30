@@ -115,7 +115,7 @@ class DocumentUrlGenerator extends ProviderBasedGenerator implements VersatileGe
         if ($name instanceof SeoAwareInterface) {
             return true;
         } else {
-            throw new RouteNotFoundException('$name must be an instance of SeoAwareInterface');
+            return false;
         }
     }
     /**
