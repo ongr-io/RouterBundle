@@ -32,6 +32,14 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->booleanNode('disable_alias')
+                    ->info('disables aliasing of Symfony router in case it is done somewhere else')
+                    ->defaultFalse()
+                ->end()
+                ->integerNode('router_priority')
+                    ->defaultValue(-100)
+                    ->info('The priority with which the ONGR router is set to the chain router')
+                ->end()
                 ->scalarNode('manager')
                     ->defaultValue('es.manager.default')
                     ->info('Elasticsearch manager to use in the ONGR default router')
@@ -39,6 +47,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('seo_routes')
                     ->defaultValue([])
+                    ->useAttributeAsKey('name')
                     ->prototype('scalar')->end()
                 ->end()
             ->end();

@@ -116,7 +116,6 @@ class ElasticsearchRouteProviderTest extends AbstractElasticsearchTestCase
             'GET'
         );
         $provider->getRouteCollectionForRequest($request);
-
     }
 
     /**
@@ -135,6 +134,5 @@ class ElasticsearchRouteProviderTest extends AbstractElasticsearchTestCase
             'GET'
         );
         $provider->getRouteCollectionForRequest($request);
-
     }
 }
