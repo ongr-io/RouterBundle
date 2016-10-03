@@ -22,6 +22,10 @@ class SetRouterPass implements CompilerPassInterface
         if (!$container->getParameter('ongr_router.disable_alias')) {
             $container->setAlias('router', 'ongr_router.chain_router');
         }
+
+        $container
+            ->getDefinition('ongr_router.dynamic_router')
+            ->addTag('router', ['priority' => $container->getParameter('ongr_router.router_priority')]);
         $container
             ->getDefinition('ongr_router.elasticsearch_route_provider')
             ->addMethodCall(

@@ -49,12 +49,20 @@ class RoutePassTest extends \PHPUnit_Framework_TestCase
                 ['routes to be changed']
             ]
         );
+        $dynamicRouter = new Definition(
+            'Symfony\Cmf\Component\Routing\DynamicRouter'
+        );
         $container->setDefinition(
             'ongr_router.elasticsearch_route_provider',
             $provider
         );
+        $container->setDefinition(
+            'ongr_router.dynamic_router',
+            $dynamicRouter
+        );
         $container->setParameter('ongr_router.seo_routes', $routes);
         $container->setParameter('ongr_router.disable_alias', false);
+        $container->setParameter('ongr_router.router_priority', -100);
         $container->setParameter('ongr_router.manager', 'es.manager.default');
 
         return $container;

@@ -38,5 +38,6 @@ class ONGRRouterExtension extends Extension
         $container->setParameter('ongr_router.manager', $config['manager']);
         $container->setParameter('ongr_router.disable_alias', $config['disable_alias']);
         $container->setParameter('ongr_router.seo_routes', $config['seo_routes']);
+        $container->setParameter('ongr_router.router_priority', $config['router_priority']);
     }
 }
