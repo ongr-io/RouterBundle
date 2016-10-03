@@ -38,6 +38,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $expectedConfiguration = [
             'manager' => 'es.manager.default',
             'seo_routes' => $configs['ongr_router']['seo_routes'],
+            'disable_alias' => false,
+            'router_priority' => -100,
         ];
         $this->assertEquals($expectedConfiguration, $processorConfig);
     }

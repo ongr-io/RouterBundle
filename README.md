@@ -82,6 +82,8 @@ ongr_elasticsearch:
                 - AppBundle
 
 ongr_router:
+    #disable_alias: true    # defaults to false
+    #router_priority: 1000  # defaults to -100
     manager: es.manager.default
     seo_routes:
         'AppBundle:Product': AppBundle:Product:document
@@ -91,10 +93,19 @@ ongr_router:
 
 > WARNING: If SeoAwareTrait is used you must implement `urlAnalyzer` analyzer, otherwise there will be a fatal error on index create.
 
+In the configuration of the bundle you need to specify the `es.manager` to use and under the `seo_routes` you have to specify documents that will have seo_routes as keys and the controller action that will handle the request as a values.
+
 At `_controller` you define controller and action for every document type.
 `_route` is a name of this route and it can be used at path generation.
 
 `urlAnalyzer` at `ongr_elasticsearch` configuration defines how all url fields are analyzed by Elasticsearch.
+
+If you are using another third party bundle that also has an aliased Symfony router, you may set `disable_alias` to `true`. This
+prevents possible conflicts.
+
+`router_priority` parameter defines the priority with which the `ONGR` dynamic router
+is set to the chain router. It defaults to -100 in order to be called after the standard Symfony router
+but this value can be changed depending on your projects' need.
 
 Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/mapping.md) for more information about the configuration.
 
@@ -112,11 +123,12 @@ namespace AppBundle\Document;
 
 use ONGR\ElasticsearchBundle\Annotation as ES;
 use ONGR\RouterBundle\Document\SeoAwareTrait;
+use ONGR\RouterBundle\Document\SeoAwareInterface;
 
 /**
  * @ES\Document()
  */
-class Product
+class Product implements SeoAwareInterface
 {
     use SeoAwareTrait; // <- Trait for URL's
 
