@@ -6,8 +6,8 @@ At url matching phase it additionaly searches for elasticsearch documents with s
 This can be used for generating/matching nice URLs for any document.
 Beautiful URLs help SEO and improve user's usability experience.
 
-If you have any questions, don't hesitate to ask them on [![Join the chat at https://gitter.im/ongr-io/support](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ongr-io/support)
- chat, or just come to say Hi ;).
+If you need any help, [stack overflow](http://stackoverflow.com/questions/tagged/ongr)
+is the preffered and recommended way to ask ONGR support questions.
  
 [![Build Status](https://travis-ci.org/ongr-io/RouterBundle.svg?branch=master)](https://travis-ci.org/ongr-io/RouterBundle)
 [![Coverage Status](https://coveralls.io/repos/ongr-io/RouterBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/ongr-io/RouterBundle?branch=master)
@@ -16,9 +16,9 @@ If you have any questions, don't hesitate to ask them on [![Join the chat at htt
 
 ## Documentation
 
-The online documentation of the bundle is [here](Resources/doc/index.md)
+The online documentation of the bundle is [here](http://docs.ongr.io/RouterBundle)
 
-For contribution rules take a look at [contribute](Resources/doc/contribute.md) topic.
+For contribution rules take a look at [contribute](http://docs.ongr.io/common/Contributing) topic.
 
 
 ## Setup the bundle
@@ -69,15 +69,13 @@ ongr_elasticsearch:
                 type: custom
                 tokenizer: keyword
                 filter: [lowercase]
-    connections:
-        default:
-            index_name: acme
-            analysis:
-                analyzer:
-                    - urlAnalyzer
     managers:
         default:
-            connection: default
+            index: 
+                index_name: acme
+                analysis:
+                    analyzer:
+                        - urlAnalyzer
             mappings:
                 - AppBundle
 
