@@ -110,11 +110,7 @@ class DocumentUrlGenerator extends ProviderBasedGenerator implements VersatileGe
      */
     public function supports($name)
     {
-        if ($name instanceof SeoAwareInterface) {
-            return true;
-        } else {
-            return false;
-        }
+        return $name instanceof SeoAwareInterface;
     }
     /**
      * @param mixed $name
@@ -127,8 +123,8 @@ class DocumentUrlGenerator extends ProviderBasedGenerator implements VersatileGe
     {
         if ($name instanceof SeoAwareInterface) {
             return 'The route object is fit for parsing to generate() method';
-        } else {
-            return 'Given route object must be an instance of SeoAwareInterface';
         }
+
+        return 'Given route object must be an instance of SeoAwareInterface';
     }
 }
