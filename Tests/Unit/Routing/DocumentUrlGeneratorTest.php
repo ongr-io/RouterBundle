@@ -11,8 +11,10 @@
 
 namespace ONGR\RouterBundle\Tests\Unit\Routing;
 
+use ONGR\ElasticsearchBundle\Mapping\MetadataCollector;
 use ONGR\RouterBundle\Routing\DocumentUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Cmf\Component\Routing\RouteProviderInterface;
 
 class DocumentUrlGeneratorTest extends WebTestCase
 {
@@ -22,7 +24,9 @@ class DocumentUrlGeneratorTest extends WebTestCase
     public function testGettersAndSetters()
     {
         $routeMap = new \stdClass();
-        $routeProvider = $this->getMock('Symfony\Cmf\Component\Routing\RouteProviderInterface');
+        /** @var RouteProviderInterface $routeProvider */
+        $routeProvider = $this->createMock('Symfony\Cmf\Component\Routing\RouteProviderInterface');
+        /** @var MetadataCollector $collector */
         $collector = $this->getMockBuilder('ONGR\ElasticsearchBundle\Mapping\MetadataCollector')
             ->disableOriginalConstructor()
             ->getMock();
@@ -44,7 +48,7 @@ class DocumentUrlGeneratorTest extends WebTestCase
     public function testGetDebugMessageWithBadObject()
     {
         $document = new \stdClass();
-        $routeProvider = $this->getMock('Symfony\Cmf\Component\Routing\RouteProviderInterface');
+        $routeProvider = $this->createMock('Symfony\Cmf\Component\Routing\RouteProviderInterface');
         $urlGenerator = new DocumentUrlGenerator($routeProvider);
         $debugMessage = $urlGenerator->getRouteDebugMessage($document);
 
@@ -62,7 +66,7 @@ class DocumentUrlGeneratorTest extends WebTestCase
     public function testGenerateException()
     {
         $document = new \stdClass();
-        $routeProvider = $this->getMock('Symfony\Cmf\Component\Routing\RouteProviderInterface');
+        $routeProvider = $this->createMock('Symfony\Cmf\Component\Routing\RouteProviderInterface');
         $urlGenerator = new DocumentUrlGenerator($routeProvider);
 
         $urlGenerator->generate($document);

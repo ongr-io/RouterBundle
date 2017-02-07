@@ -30,7 +30,7 @@ class Product implements SeoAwareInterface
     public $id;
 
     /**
-     * @ES\Property(type="string")
+     * @ES\Property(type="text")
      */
     public $title;
 }

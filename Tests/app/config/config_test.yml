@@ -13,17 +13,12 @@ ongr_elasticsearch:
                 type: custom
                 tokenizer: keyword
                 filter: [lowercase]
-    connections:
-        default:
-            hosts:
-                - 127.0.0.1:9200
-            index_name: ongr-seo-test
-            analysis:
-                analyzer:
-                    - urlAnalyzer
     managers:
         default:
-            connection: default
+            index:
+                hosts:
+                    - 127.0.0.1:9200
+                index_name: ongr-seo-test
             mappings:
                 - AppBundle
 
