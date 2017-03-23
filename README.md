@@ -72,9 +72,6 @@ ongr_elasticsearch:
     connections:
         default:
             index_name: acme
-            analysis:
-                analyzer:
-                    - urlAnalyzer
     managers:
         default:
             connection: default
@@ -95,9 +92,6 @@ ongr_router:
 
 In the configuration of the bundle you need to specify the `es.manager` to use and under the `seo_routes` you have to specify documents that will have seo_routes as keys and the controller action that will handle the request as a values.
 
-At `_controller` you define controller and action for every document type.
-`_route` is a name of this route and it can be used at path generation.
-
 `urlAnalyzer` at `ongr_elasticsearch` configuration defines how all url fields are analyzed by Elasticsearch.
 
 If you are using another third party bundle that also has an aliased Symfony router, you may set `disable_alias` to `true`. This
@@ -107,7 +101,7 @@ prevents possible conflicts.
 is set to the chain router. It defaults to -100 in order to be called after the standard Symfony router
 but this value can be changed depending on your projects' need.
 
-Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/mapping.md) for more information about the configuration.
+Check [Elasticsearch bundle mappings docs](http://docs.ongr.io/ElasticsearchBundle/mapping) for more information about the configuration.
 
 
 ## Usage example
@@ -133,7 +127,7 @@ class Product implements SeoAwareInterface
     use SeoAwareTrait; // <- Trait for URL's
 
     /**
-     * @ES\Property(type="string")
+     * @ES\Property(type="keyword")
      */
     public $title;
 
@@ -175,7 +169,7 @@ Create an elasticsearch index by running this command in your terminal:
     
 ```
 
-> More info about all commands can be found in the [Elasticsearch bundle commands chapter](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/commands.md).
+> More info about all commands can be found in the [Elasticsearch bundle commands chapter](http://docs.ongr.io/ElasticsearchBundle/commands).
 
 Also, run the following curl command in your terminal to insert a product for this demonstration.
 
