@@ -6,8 +6,8 @@ At url matching phase it additionaly searches for elasticsearch documents with s
 This can be used for generating/matching nice URLs for any document.
 Beautiful URLs help SEO and improve user's usability experience.
 
-If you need any help, [stack overflow](http://stackoverflow.com/questions/tagged/ongr)
-is the preffered and recommended way to ask ONGR support questions.
+If you have any questions, don't hesitate to ask them on [![Join the chat at https://gitter.im/ongr-io/support](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ongr-io/support)
+ chat, or just come to say Hi ;).
  
 [![Build Status](https://travis-ci.org/ongr-io/RouterBundle.svg?branch=master)](https://travis-ci.org/ongr-io/RouterBundle)
 [![Coverage Status](https://coveralls.io/repos/ongr-io/RouterBundle/badge.svg?branch=master&service=github)](https://coveralls.io/github/ongr-io/RouterBundle?branch=master)
@@ -16,9 +16,9 @@ is the preffered and recommended way to ask ONGR support questions.
 
 ## Documentation
 
-The online documentation of the bundle is [here](http://docs.ongr.io/RouterBundle)
+The online documentation of the bundle is [here](Resources/doc/index.md)
 
-For contribution rules take a look at [contribute](http://docs.ongr.io/common/Contributing) topic.
+For contribution rules take a look at [contribute](Resources/doc/contribute.md) topic.
 
 
 ## Setup the bundle
@@ -69,13 +69,12 @@ ongr_elasticsearch:
                 type: custom
                 tokenizer: keyword
                 filter: [lowercase]
+    connections:
+        default:
+            index_name: acme
     managers:
         default:
-            index: 
-                index_name: acme
-                analysis:
-                    analyzer:
-                        - urlAnalyzer
+            connection: default
             mappings:
                 - AppBundle
 
@@ -93,9 +92,6 @@ ongr_router:
 
 In the configuration of the bundle you need to specify the `es.manager` to use and under the `seo_routes` you have to specify documents that will have seo_routes as keys and the controller action that will handle the request as a values.
 
-At `_controller` you define controller and action for every document type.
-`_route` is a name of this route and it can be used at path generation.
-
 `urlAnalyzer` at `ongr_elasticsearch` configuration defines how all url fields are analyzed by Elasticsearch.
 
 If you are using another third party bundle that also has an aliased Symfony router, you may set `disable_alias` to `true`. This
@@ -105,7 +101,7 @@ prevents possible conflicts.
 is set to the chain router. It defaults to -100 in order to be called after the standard Symfony router
 but this value can be changed depending on your projects' need.
 
-Check [Elasticsearch bundle mappings docs](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/mapping.md) for more information about the configuration.
+Check [Elasticsearch bundle mappings docs](http://docs.ongr.io/ElasticsearchBundle/mapping) for more information about the configuration.
 
 
 ## Usage example
@@ -131,7 +127,7 @@ class Product implements SeoAwareInterface
     use SeoAwareTrait; // <- Trait for URL's
 
     /**
-     * @ES\Property(type="string")
+     * @ES\Property(type="keyword")
      */
     public $title;
 
@@ -173,7 +169,7 @@ Create an elasticsearch index by running this command in your terminal:
     
 ```
 
-> More info about all commands can be found in the [Elasticsearch bundle commands chapter](https://github.com/ongr-io/ElasticsearchBundle/blob/master/Resources/doc/commands.md).
+> More info about all commands can be found in the [Elasticsearch bundle commands chapter](http://docs.ongr.io/ElasticsearchBundle/commands).
 
 Also, run the following curl command in your terminal to insert a product for this demonstration.
 

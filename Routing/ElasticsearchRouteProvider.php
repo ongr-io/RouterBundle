@@ -12,10 +12,13 @@
 namespace ONGR\RouterBundle\Routing;
 
 use ONGR\ElasticsearchBundle\Mapping\MetadataCollector;
-use ONGR\ElasticsearchBundle\Result\Result;
+use ONGR\ElasticsearchBundle\Result\DocumentIterator;
+use ONGR\ElasticsearchBundle\Result\ObjectIterator;
 use ONGR\ElasticsearchBundle\Service\Manager;
-use ONGR\ElasticsearchDSL\Query\MatchQuery;
+use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\FullText\MatchQuery;
 use ONGR\ElasticsearchDSL\Search;
+use ONGR\RouterBundle\Document\SeoAwareInterface;
 use Symfony\Cmf\Component\Routing\RouteProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -92,10 +95,13 @@ class ElasticsearchRouteProvider implements RouteProviderInterface
         $requestPath = $request->getPathInfo();
 
         $search = new Search();
-        $search->addFilter(new MatchQuery('url', $requestPath));
+        $search->addQuery(new MatchQuery('url', $requestPath), BoolQuery::FILTER);
 
-        $results = $this->manager->execute(array_keys($this->routeMap), $search, Result::RESULTS_OBJECT);
+        $results = $this->manager->search(array_keys($this->routeMap), $search->toArray());
+        #TODO Clean up this place.
+        $results = new DocumentIterator($results, $this->manager);
         try {
+            /** @var SeoAwareInterface $document */
             foreach ($results as $document) {
                 $type = $this->collector->getDocumentType(get_class($document));
                 if (isset($this->routeMap[$type])) {

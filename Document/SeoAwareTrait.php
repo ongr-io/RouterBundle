@@ -21,7 +21,7 @@ trait SeoAwareTrait
     /**
      * @var string URL.
      *
-     * @ES\Property(name="url", type="string", options={"analyzer"="urlAnalyzer"})
+     * @ES\Property(name="url", type="text", options={"analyzer"="urlAnalyzer"})
      */
     private $url;
 

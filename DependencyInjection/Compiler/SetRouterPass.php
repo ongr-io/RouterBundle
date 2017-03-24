@@ -24,9 +24,6 @@ class SetRouterPass implements CompilerPassInterface
         }
 
         $container
-            ->getDefinition('ongr_router.dynamic_router')
-            ->addTag('router', ['priority' => $container->getParameter('ongr_router.router_priority')]);
-        $container
             ->getDefinition('ongr_router.elasticsearch_route_provider')
             ->addMethodCall(
                 'setManager',
